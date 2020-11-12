@@ -18,8 +18,11 @@
   "homepage": "https://github.com/Wajiddat18c/KingsmanBarbershop#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "knex": "^0.21.12",
     "mongodb": "^3.6.3",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.6"
+    "nodemailer": "^6.4.16",
+    "nodemon": "^2.0.6",
+    "objection": "^2.2.3"
   }
 }
