@@ -10,7 +10,7 @@
     "migration:rollback": "knex migrate:rollback",
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
-    "cleandb": "knex migrate:rollback && knex migrate:latest && knex seed:run",
+    "cleandb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "repository": {
     "type": "git",
