@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingsman barbershop booking</title>
+</head>
+<body>
+    <h3>
+        Book en tid her:
+    </h3>
+    <form action="/savechanges" method="POST">
+        <div>
+            <p>Services:</p>
+            <div id="serviceList">
+
+            </div>
+        </div>
+        <br>
+        <input name="name" id="name" placeholder="navn">
+        <br>
+        <input name="tlf" placeholder="telefon">
+        <br>
+        <input name="e-mail" placeholder="e-mail" type="text">
+        <br>
+        <input name="timestamp" placeholder="tidspunkt, timestamp">
+        <br>
+        <button type="submit">Book</button>
+    </form>
+    <script>
+        const services = async () => {
+            let response = await fetch("/services");
+            return await response.json();
+        };
+        services().then((values) => {
+            
+            for(let i in values){
+                let val = values[i];
+                
+                serviceDiv = document.getElementById("serviceList");
+
+                let div = document.createElement("div");
+
+                
+                
+                let radiobutton = document.createElement("input");
+                radiobutton.setAttribute("type", "checkbox");  
+                radiobutton.setAttribute("name", "service");
+                
+                div.appendChild(radiobutton);
+                
+                let span = document.createElement("span");
+                span.innerText = `${val.name} - ${val.price} kr,-`;
+                
+                div.appendChild(span);
+                
+                //serviceDiv.appendChild(div);
+            }
+
+
+            
+        }, (reject) => {
+            console.log(`Services weren't received correctly, error: ${reject}`);
+        });
+    </script>
+</body>
+</html>

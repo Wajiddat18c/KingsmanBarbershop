@@ -11,6 +11,12 @@ const knex = Knex(knexfile.development);
 
 Model.knex(knex);
 
+const userRoute = require('./routes/account');
+app.use(userRoute);
+
+const bookingRoute = require('./routes/booking');
+app.use(bookingRoute);
+
 /* var mysql = require('mysql');
 
 var con = mysql.createConnection({
@@ -72,6 +78,8 @@ var mailOptions = {
 };
 
 // send mail with defined transport object
+
+/*
 transporter.sendMail(mailOptions, function (error, info) {
   if (error) {
     return console.log(error);
@@ -79,6 +87,7 @@ transporter.sendMail(mailOptions, function (error, info) {
 
   console.log("Message sent: " + info.response);
 });
+*/
 
 app.listen(serverPort, (error) => {
   if (error) {
