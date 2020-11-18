@@ -46,7 +46,8 @@
                 let radiobutton = document.createElement("input");
                 radiobutton.setAttribute("type", "checkbox");  
                 radiobutton.setAttribute("name", "service");
-                radiobutton.setAttribute("value", val.id);
+                radiobutton.setAttribute("value", [val.id, val.name, val.price]);
+                radiobutton.setAttribute("value", `{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}`);
                 //radiobutton.setAttribute("name", `service_${val.id}`);
                 
                 div.appendChild(radiobutton);

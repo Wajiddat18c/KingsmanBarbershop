@@ -14,14 +14,19 @@ Model.knex(knex);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-
+//auto add all from from?
 const userRoute = require('./routes/account');
 app.use(userRoute);
 const bookingRoute = require('./routes/booking');
 app.use(bookingRoute);
+const customerRoute = require('./routes/customers');
+app.use(customerRoute);
+const serviceRoute = require('./routes/services');
+app.use(serviceRoute);
+
 
 app.get("/", (req, res) => {
-  res.send("HELLO123");
+  res.send("HELLO1236");
 });
 
 const nodemailer = require("nodemailer");
