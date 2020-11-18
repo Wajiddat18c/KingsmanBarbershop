@@ -78,11 +78,26 @@ exports.up = function(knex) {
      table.integer("user_id").unsigned().notNullable();
      table.foreign("user_id").references("users.id");
    })
+   .createTable("booking_services", (table) => {
+     table.increments("id");
+     table.integer("booking_id").unsigned().notNullable();
+     table.foreign("booking_id").references("booking.id");
+     table.integer("service_id").unsigned().notNullable();
+     table.foreign("service_id").references("services.id");
+   })
+   .createTable("booking_products", (table) => {
+    table.increments("id");
+    table.integer("booking_id").unsigned().notNullable();
+    table.foreign("booking_id").references("booking.id");
+    table.integer("product_id").unsigned().notNullable();
+    table.foreign("product_id").references("products.id");
+  })
 };
 
 exports.down = function(knex) {
   return knex.schema
-  
+  .dropTableIfExists("booking_services")
+  .dropTableIfExists("booking_products")
   .dropTableIfExists("newsletter")
   .dropTableIfExists("shop")
   
@@ -96,5 +111,6 @@ exports.down = function(knex) {
   .dropTableIfExists("booking")
   .dropTableIfExists("customer")
   .dropTableIfExists("services")
+  
   
 };

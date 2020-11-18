@@ -29,6 +29,8 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.16",
     "nodemon": "^2.0.6",
-    "objection": "^2.2.3"
+    "objection": "^2.2.3",
+    "escape-html": "^1.0.3",
+    "node-cron": "^2.0.3"
   }
 }
