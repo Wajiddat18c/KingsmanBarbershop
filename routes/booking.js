@@ -2,15 +2,18 @@ const router = require('express').Router();
 const fs = require('fs');
 const escape = require('escape-html');
 const nodemailer = require('nodemailer');
+//const twilio = require('twilio');
+const twilioCreds = require('../config/twilioCreds');
+const twillio = require('twilio')(twilioCreds.sid, twilioCreds.auth_token);
 
 const Customer = require('../models/Customer');
-const Service = require('../models/Service');
 const Booking = require('../models/Booking');
 const BookingServices = require('../models/BookingServices');
 
 const bookFormPage = fs.readFileSync("__dirname + '/../public/bookform.html", "utf8");
 const mailCreds = require("../config/mailCreds");
-const { json } = require('express');
+
+
 
 router.get("/book", async (req, res) => {
     return res.send(bookFormPage);
@@ -30,7 +33,6 @@ router.post("/book", async (req, res) => {
     const timestamp = escape(req.body.timestamp);
     const services = req.body.service;
 
-    
     if(services.length>0){
         
         const customer = await Customer.query().insert({
@@ -38,7 +40,6 @@ router.post("/book", async (req, res) => {
             email: email,
             tlf: tlf
         });
-    
         const appointment = await Booking.query().insert({
             customer_id : customer.id,
             start_time: timestamp,
@@ -48,31 +49,27 @@ router.post("/book", async (req, res) => {
         total = 0;
         let mail_items_html = "";
         let mail_items = "";
+        try{
         for(i in services){
-            console.log(services[i])
             let service = JSON.parse(services[i]);
-            console.log(service.id);
-            console.log(service.name);
-            console.log(service.price);
             total += service.price;
             service_str = 
             `- ${service.name}, ${service.price} kr,-
             `;
             mail_items += service_str;
             mail_items_html += service_str + "<br>";
-            
             await BookingServices.query().insert({
                 booking_id: appointment.id,
                 service_id: escape(services[i])
             });
-            
         }
-        console.log("total: "+total);
+        }catch(error){
+            console.log(error);
+        }
         var transporter = nodemailer.createTransport(mailCreds);
         
         let cancel = "https://localhost:3000/cancel";
         let link = "https://localhost:3000";
-
         // setup e-mail data
         var mailOptions = {
         from: '"Kingsman Barbershop" <wajidnodemailer@gmail.com>', // sender address (who sends)
@@ -104,7 +101,19 @@ router.post("/book", async (req, res) => {
                 <br>
                 <br>Hav en god dag.`, // html body
         };
-        
+        console.log(tlf);
+        try {
+            //var tclient = new twilio(twilioCreds.sid, twilioCreds.auth_token)
+            twillio.messages.create({
+                to: "+45"+tlf,
+                from: twilioCreds.sender_phone_number,
+                body: `Hej ${name}, \n\nTak for at du bestilte tid hos Kingsman Barbershop, d. ${timestamp}\n\nKan du ikke alligevel så aflys her: ${cancel}\n\nHilsen Kingsman Barbershop.`
+            })
+            .then(message => console.log(message.sid));
+        } catch (error) {
+            console.log(error);
+        }
+
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
               return console.log(error);

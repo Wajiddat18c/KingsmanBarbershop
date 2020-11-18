@@ -23,14 +23,15 @@
   },
   "homepage": "https://github.com/Wajiddat18c/KingsmanBarbershop#readme",
   "dependencies": {
+    "escape-html": "^1.0.3",
     "express": "^4.17.1",
     "knex": "^0.21.12",
     "mongodb": "^3.6.3",
     "mysql": "^2.18.1",
+    "node-cron": "^2.0.3",
     "nodemailer": "^6.4.16",
     "nodemon": "^2.0.6",
     "objection": "^2.2.3",
-    "escape-html": "^1.0.3",
-    "node-cron": "^2.0.3"
+    "twilio": "3.49.3"
   }
 }

@@ -59,6 +59,8 @@ transporter.sendMail(mailOptions, (error, info) => {
 });
 */
 
+
+//cron.schedule("0,15,30,45 * * * * *", async () => {
 cron.schedule("0 6 * * *", async () => {
   console.log("test");
   
@@ -70,9 +72,7 @@ cron.schedule("0 6 * * *", async () => {
     const customer = await Customer.query().select("email", "name").findById(appointment.customer_id)
 
     var transporter = nodemailer.createTransport(mailCreds);
-
-    customer
-
+    
     var mailOptions = {
       from: '"Kingsman Barbershop" <wajidnodemailer@gmail.com>', // sender address (who sends)
       to: `${customer.name} <${customer.email}>`, // list of receivers (who receives)
@@ -81,14 +81,15 @@ cron.schedule("0 6 * * *", async () => {
       html: 
           `Hej ${customer.name}, husk din tid hos Kingsman barbershop, i dag: ${appointment.start_time}.`, // html body
       };
+      /*
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           return console.log(error);
         }
       
         console.log("Message sent: " + info.response);
-    });
-    
+      });
+      */
   })
 });
 
