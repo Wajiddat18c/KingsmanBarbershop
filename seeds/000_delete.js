@@ -5,8 +5,12 @@ exports.seed = function(knex) {
   then(() => {
     return knex('services').del().then(() => {
       return knex('customer').del().then(() => {
-        return knex('booking').del();
-      })
+        return knex('booking').del().then(() => {
+          return knex('products').del().then(() => {
+            return knex('categories').del();
+          });
+        })
+      });
     });
-  });
+  })
 };

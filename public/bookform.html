@@ -39,25 +39,14 @@
                 
                 serviceDiv = document.getElementById("serviceList");
 
-                let div = document.createElement("div");
-
-                
-                
-                let radiobutton = document.createElement("input");
-                radiobutton.setAttribute("type", "checkbox");  
-                radiobutton.setAttribute("name", "service");
-                radiobutton.setAttribute("value", [val.id, val.name, val.price]);
-                radiobutton.setAttribute("value", `{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}`);
-                //radiobutton.setAttribute("name", `service_${val.id}`);
-                
-                div.appendChild(radiobutton);
-                
-                let span = document.createElement("span");
-                span.innerText = `${val.name} - ${val.price} kr,-`;
-                
-                div.appendChild(span);
-                
-                serviceDiv.appendChild(div);
+                serviceDiv.innerHTML += `
+                <div>
+                    <input type="checkbox" name="service" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                        <span>
+                            ${val.name} - ${val.price} kr,-
+                        </span>
+                </div>
+                `;
             }
 
 

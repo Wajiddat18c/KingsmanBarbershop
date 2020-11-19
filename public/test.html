@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingsman barbershop booking</title>
+</head>
+
+<body>
+    <h3>
+        Book en tid her:
+    </h3>
+    <form action="/book" method="POST">
+        <div>
+            <p>Services:</p>
+            <div id="serviceList">
+
+            </div>
+        </div>
+        <div>
+            <p>Produkter (Valgfrit):</p>
+            <div id="productList">
+
+            </div>
+        </div>
+        <br>
+        <input name="name" id="name" placeholder="navn">
+        <br>
+        <input name="tlf" placeholder="telefon">
+        <br>
+        <input name="email" placeholder="email" type="text">
+        <br>
+        <input name="timestamp" placeholder="tidspunkt, timestamp">
+        <br>
+        <button type="submit">Book</button>
+    </form>
+    <script>
+
+        //Get services from api
+        const services = async () => {
+            let response = await fetch("/services");
+            return await response.json();
+        };
+        const products = async () => {
+            let response = await fetch("/products");
+            return await response.json();
+        };
+
+        services().then((values) => {
+
+            for (let i in values) {
+                let val = values[i];
+
+                serviceDiv = document.getElementById("serviceList");
+                /*
+                serviceDiv.innerHTML += `
+                <div>
+                    <input type="checkbox" name="service" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                        <span>
+                            ${val.name} - ${val.price} kr,-
+                        </span>
+                </div>
+                `;
+                */
+                let div = document.createElement("div");
+                let radiobutton = document.createElement("input");
+                radiobutton.setAttribute("type", "checkbox");
+                radiobutton.setAttribute("name", "service");
+                radiobutton.setAttribute("value", `{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}`);
+                //radiobutton.setAttribute("name", `service_${val.id}`);
+
+                div.appendChild(radiobutton);
+
+                let span = document.createElement("span");
+                span.innerText = `${val.name} - ${val.price} kr,-`;
+
+                div.appendChild(span);
+
+                serviceDiv.appendChild(div);
+            }
+
+
+
+        }, (reject) => {
+            console.log(`Services weren't received correctly, error: ${reject}`);
+        });
+        products().then((values) => {
+            for (let i in values) {
+                let val = values[i];
+                document.getElementById("productList").innerHTML +=
+                    `<div>
+                        <input type="checkbox" name="products" value=' {"id": ${val.id}, "name": "${val.name}", "price": "${val.price}" } '>
+                        <span>
+                            ${val.name} - ${val.price} kr,-
+                        </span>
+                        <span>
+                            antal:
+                        </span>
+                        <select name="count">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>`;
+            }
+        }, (reject) => {
+            console.log(`Products weren't received correctly, error: ${reject}`);
+        })
+    </script>
+</body>
+
+</html>

@@ -23,6 +23,8 @@ const customerRoute = require('./routes/customers');
 app.use(customerRoute);
 const serviceRoute = require('./routes/services');
 app.use(serviceRoute);
+const productRoute = require('./routes/products');
+app.use(productRoute);
 
 
 app.get("/", (req, res) => {

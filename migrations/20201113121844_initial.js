@@ -91,6 +91,7 @@ exports.up = function(knex) {
     table.foreign("booking_id").references("booking.id");
     table.integer("product_id").unsigned().notNullable();
     table.foreign("product_id").references("products.id");
+    table.integer("amount").notNullable();
   })
 };
 
