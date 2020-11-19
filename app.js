@@ -28,7 +28,8 @@ app.use(productRoute);
 
 
 app.get("/", (req, res) => {
-  res.send("HELLO1236");
+  console.log("Hej med dig!")
+  res.send("Alex meget varm");
 });
 
 const nodemailer = require("nodemailer");
