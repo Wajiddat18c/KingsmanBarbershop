@@ -50,19 +50,6 @@ var mailOptions = {
   html: `Welcome ${username} to the chat app, join the room to chat with other online users`, // html body
 };
 
-// send mail with defined transport object
-
-/*
-transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-    return console.log(error);
-  }
-
-  console.log("Message sent: " + info.response);
-});
-*/
-
-
 //cron.schedule("0,15,30,45 * * * * *", async () => {
 cron.schedule("0 6 * * *", async () => {
   console.log("test");
