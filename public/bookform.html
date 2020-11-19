@@ -16,6 +16,12 @@
 
             </div>
         </div>
+        <div>
+            <p>Produkter (Valgfrit):</p>
+            <div id="productList">
+
+            </div>
+        </div>
         <br>
         <input name="name" id="name" placeholder="navn">
         <br>
@@ -54,6 +60,34 @@
         }, (reject) => {
             console.log(`Services weren't received correctly, error: ${reject}`);
         });
+        const products = async () => {
+            let response = await fetch("/products");
+            return await response.json();
+        };
+        products().then((values) => {
+            for (let i in values) {
+                let val = values[i];
+                document.getElementById("productList").innerHTML +=
+                    `<div>
+                        <input type="checkbox" name="products" value=' {"id": ${val.id}, "name": "${val.name}", "price": "${val.price}" } '>
+                        <span>
+                            ${val.name} - ${val.price} kr,-
+                        </span>
+                        <span>
+                            antal:
+                        </span>
+                        <select name="count">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>`;
+            }
+        }, (reject) => {
+            console.log(`Products weren't received correctly, error: ${reject}`);
+        })
     </script>
 </body>
 </html>
