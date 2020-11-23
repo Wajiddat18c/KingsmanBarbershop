@@ -20,6 +20,10 @@ router.get("/book", async (req, res) => {
     return res.send(bookFormPage);
 });
 
+router.get("/unavailable_times", async(req, res) => {
+    return res.send(await Booking.query().select("id", "service_id", "start_time").whereRaw("DATE(start_time)>CURRENT_TIMESTAMP()"));
+});
+
 router.post("/book", async (req, res) => {
 
     //Noter test korrekte formater for data, eventuelt om kunden allerede findes, 
