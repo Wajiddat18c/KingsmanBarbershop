@@ -7,6 +7,14 @@ const serverPort = process.env.PORT || 4000;
 const { Model } = require("objection");
 const Knex = require("knex");
 const knexfile = require("./knexfile.js");
+const session = require("express-session");
+app.use(
+  session({
+    secret: require("./config/config.json").sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 const knex = Knex(knexfile.development);
 
@@ -31,11 +39,19 @@ app.use(authRoute);
 
 const booking_services_route = require("./routes/booking_services");
 app.use(booking_services_route);
-
+const fs = require("fs");
+const footerPage = fs.readFileSync(
+    __dirname +  '/./public/footer.html', 
+    "utf8"
+  );
+  const headerPage = fs.readFileSync(
+    __dirname + '/./public/header.html', 
+    "utf8"
+  );
 
 app.get("/", (req, res) => {
 	console.log("Hej med dig!");
-	res.send("Alex meget varm");
+	res.send(headerPage + "HELLO! NO HTML HERE!" + footerPage);
 });
 
 const nodemailer = require("nodemailer");
@@ -43,6 +59,8 @@ const { options } = require("./routes/booking");
 const mailCreds = require("./config/mailCreds");
 const Booking = require("./models/Booking.js");
 const Customer = require("./models/Customer");
+
+
 
 var transporter = nodemailer.createTransport(mailCreds);
 let username = "alex";
