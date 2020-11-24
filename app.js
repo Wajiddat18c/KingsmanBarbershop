@@ -25,6 +25,10 @@ const serviceRoute = require("./routes/services");
 app.use(serviceRoute);
 const productRoute = require("./routes/products");
 app.use(productRoute);
+
+const authRoute = require("./routes/auth");
+app.use(authRoute);
+
 const booking_services_route = require("./routes/booking_services");
 app.use(booking_services_route);
 
