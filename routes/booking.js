@@ -11,13 +11,16 @@ const Booking = require('../models/Booking');
 const BookingServices = require('../models/BookingServices');
 const BookingProducts = require('../models/BookingProducts');
 
+
+const header = fs.readFileSync(__dirname + '/../public/header.html', "utf8");
+const footer = fs.readFileSync(__dirname + '/../public/footer.html', "utf8");
 const bookFormPage = fs.readFileSync(__dirname + '/../public/bookform.html', "utf8");
 const mailCreds = require("../config/mailCreds");
 
 
 
 router.get("/book", async (req, res) => {
-    return res.send(bookFormPage);
+    return res.send(header+bookFormPage+footer);
 });
 
 router.get("/unavailable_times", async(req, res) => {
