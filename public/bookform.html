@@ -34,6 +34,11 @@
 
             </div>
         </div>
+        <div>
+            <div id="times">
+
+            </div>
+        </div>
         <br>
         <input name="name" id="name" placeholder="navn">
         <br>
@@ -49,12 +54,50 @@
     <script>
         
         $(() => {
-            $("#daydate").datepicker({minDate: 0, maxDate: 14});
+            $("#daydate").datepicker({minDate: 0, maxDate: 14, dateFormat: "yy-mm-dd"});
             
             $("#daydate").on("change", async (e) => {
                 console.log(e.target.value);
                 let response = await fetch("/booking_services/" + encodeURIComponent(e.target.value));
-                console.log(await response.json());
+                let reserved = await response.json();
+                console.log(reserved)
+                
+                //Add end date
+                for (const book in reserved) {
+                    let end_time = new Date(new Date(reserved[book].start_time).getTime()+reserved[book].duration*60000);
+                    reserved[book].start_time = new Date(reserved[book].start_time);
+                    reserved[book].end_time = end_time;
+                    /*
+                    //Testing if enddate works
+                    console.log("start: "+start_time)
+                    console.log("duration: "+reserved[book].duration);
+                    console.log("slut: "+ end_time);
+                    */
+                }
+                let closed = new Date(Date.parse(e.target.value+"T16:00"))
+                document.getElementById("times").innerHTML = "";
+                for(let dt = new Date(Date.parse(e.target.value+"T10:00")); dt < closed; dt = new Date(dt.getTime()+15*60000) ){
+                    let available = true;
+                    for (const book in reserved) {
+
+                        if(dt >= reserved[book].start_time && dt <= reserved[book].end_time)
+                        {
+                            reserved[book].end_time
+                            available = false;
+                            break;
+                        }    
+                        
+                    }
+                    if(available)
+                    {
+                        document.getElementById("times").innerHTML += `
+                        <button>
+                            ${dt.getHours()}:${dt.getMinutes()}
+                        </button>
+                        `;
+                    }
+                        
+                }
             });
            
 
