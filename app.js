@@ -37,6 +37,9 @@ app.use(productRoute);
 const authRoute = require("./routes/auth");
 app.use(authRoute);
 
+const resetRoute = require("./routes/reset");
+app.use(resetRoute);
+
 const booking_services_route = require("./routes/booking_services");
 app.use(booking_services_route);
 const fs = require("fs");

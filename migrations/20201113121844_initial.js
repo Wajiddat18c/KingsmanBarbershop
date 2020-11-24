@@ -7,6 +7,7 @@ exports.up = function(knex) {
       table.string("email").unique().notNullable();
       table.integer("tlf").notNullable();
       table.string("name").notNullable();
+      table.string("resetToken").unique().defaultTo(knex.raw("NULL"));
   })
   .createTable("newsletter", (table) => {
     table.increments("id");
