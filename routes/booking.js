@@ -84,7 +84,7 @@ router.post("/booking_products", async (req, res) => {
 });
 
 router.post("/booking_dates", async (req, res) => {
-    //validate_services(req, res);
+    validate_services(req, res);
     products = jsonParser(req.body.products);
     req.session.products = [];
     for (const i in products) {
@@ -101,20 +101,60 @@ router.post("/booking_dates", async (req, res) => {
     return res.send(header+duration_html+booking_dates+footer);
 });
 router.post("/booking", async (req, res) => {
-    //console.log(req.body.timeslot);
-    //console.log(req.body.daydate);
     validate_services(req,res);
-    const timestamp = escape(req.body.daydate)+escape(req.body.timeslot);
-    console.log(req.session.email);
-    console.log(req.session.name);
-    console.log(req.session.tlf);
+    console.log(req.body.timeslot);
+    console.log(req.body.daydate);
+    req.session.timestamp = escape(req.body.daydate)+" "+escape(req.body.timeslot);
+    //Insert customer
+    const customer = await Customer.query().insert({
+        name: req.session.name,
+        email: req.session.email,
+        tlf: req.session.tlf
+    });
+    //Insert booking
+    console.log(req.session.timestamp);
+    const appointment = await Booking.query().insert({
+        customer_id: customer.id,
+        start_time: req.session.timestamp,
+        service_id: 1
+    });
+    let total = 0;
+    let mail_items = "";
+    let mail_items_html = "";
+    //Insert services
     for (const i in req.session.services) {
-        console.log(services[i])
+        const service = req.session.services[i];
+        total += service.price;
+        service_str =
+            `- ${service.name}, ${service.price} kr,-
+            `;
+        mail_items += service_str;
+        mail_items_html += service_str + "<br>";
+        await BookingServices.query().insert({
+            booking_id: appointment.id,
+            service_id: escape(service.id)
+        });
+        
     }
+    //Insert products
+    let mail_products = "";
+    let mail_products_html = "";
     for (const i in req.session.products) {
-        console.log(req.session.products[i]);
+        const product = req.session.products[i];
+        total += product.price;
+        product_str =
+            `- ${product.name}, ${product.price} kr,-
+            `;
+        mail_products += product_str;
+        mail_products_html += product_str + "<br>";
+        await BookingProducts.query().insert({
+            booking_id: appointment.id,
+            amount: 1,
+            product_id: escape(product.id)
+        });
+        
     }
-    return res.redirect("test");
+    return res.send("success "+total);
     
 })
 
