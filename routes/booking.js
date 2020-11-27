@@ -15,7 +15,11 @@ const BookingProducts = require('../models/BookingProducts');
 const header = fs.readFileSync(__dirname + '/../public/header.html', "utf8");
 const footer = fs.readFileSync(__dirname + '/../public/footer.html', "utf8");
 const bookFormPage = fs.readFileSync(__dirname + '/../public/bookform.html', "utf8");
+const booking_services = fs.readFileSync(__dirname+'/../public/book_services.html', 'utf-8');
+const booking_products = fs.readFileSync(__dirname+'/../public/book_products.html', 'utf-8');
+const booking_dates = fs.readFileSync(__dirname+'/../public/book_dates.html', 'utf-8');
 const mailCreds = require("../config/mailCreds");
+const Service = require('../models/Service');
 
 
 
@@ -26,6 +30,93 @@ router.get("/book", async (req, res) => {
 router.get("/unavailable_times", async(req, res) => {
     return res.send(await Booking.query().select("id", "service_id", "start_time").whereRaw("DATE(start_time)>CURRENT_TIMESTAMP()"));
 });
+
+router.get("/booking/:error", async (req, res) => {
+    const error = escape(req.params.error);
+    return res.send(header+`<input type="hidden" value="${error}" id="error" />`+booking_services+footer);
+});
+
+router.get("/booking", async (req, res) => {
+    return res.send(header+booking_services+footer);
+});
+
+function validate_services(req, res){
+    /*
+    That regex will check that the mail address is a non-space separated sequence of characters of length greater than one,
+    followed by an @, followed by two sequences of non-spaces characters of length two or more separated by a .
+    */
+   try{
+    if(!req.session.email.match(/^\S{1,}@\S{2,}\.\S{2,}$/))
+        return res.redirect("/booking/Ugyldig E-mail");
+    //Regex matches 8 digits
+    if(!req.session.tlf.match(/^\d{8}$/))
+        return res.redirect("/booking/"+encodeURIComponent("Ugyldigt telefon nummer, format, 8x# : ########"));
+    //Regex matches word(s) that's atleast 2 characters
+    if(!req.session.name.match(/^\w{2,}$/))
+        return res.redirect("/booking/Skriv venligst et navn på minimum 2 bogstaver.");
+    //Checks if there's atleast 1 choosen service
+    if(req.session.services.length<1)
+        return res.redirect("/booking/Vælg mindst 1 service.");
+    }
+    catch(error){
+        console.log(error);
+        return res.redirect("/booking/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
+    }
+};
+
+router.post("/booking_products", async (req, res) => {
+    req.session.email = escape(req.body.email);
+    req.session.name = escape(req.body.name);
+    req.session.tlf = escape(req.body.tlf);
+    services = jsonParser(req.body.service);
+
+    
+    //Adds service json object to session.
+    req.session.services = [];
+    for (const i in services) {
+            const service = services[i];
+            req.session.services.push({id: service.id, name: service.name, price: service.price});
+    }
+    
+    validate_services(req,res);
+
+    return res.send(header+booking_products+footer);
+});
+
+router.post("/booking_dates", async (req, res) => {
+    //validate_services(req, res);
+    products = jsonParser(req.body.products);
+    req.session.products = [];
+    for (const i in products) {
+        const product = products[i];
+        req.session.products.push({id: product.id, name: product.name, price: product.price, count: product.count});
+    }
+    console.log(req.session.products);
+    totaltime = 0;
+    for (const i in req.session.services) {
+        service = await Service.query().select("duration").where("id", "=", req.session.services[i].id);
+        totaltime += service[0].duration;
+    }
+    const duration_html = `<input type=hidden id="duration" value=${totaltime} />`;
+    return res.send(header+duration_html+booking_dates+footer);
+});
+router.post("/booking", async (req, res) => {
+    //console.log(req.body.timeslot);
+    //console.log(req.body.daydate);
+    validate_services(req,res);
+    const timestamp = escape(req.body.daydate)+escape(req.body.timeslot);
+    console.log(req.session.email);
+    console.log(req.session.name);
+    console.log(req.session.tlf);
+    for (const i in req.session.services) {
+        console.log(services[i])
+    }
+    for (const i in req.session.products) {
+        console.log(req.session.products[i]);
+    }
+    return res.redirect("test");
+    
+})
 
 router.post("/book", async (req, res) => {
 
@@ -156,25 +247,26 @@ router.post("/book", async (req, res) => {
         console.log(error);
     }
     return res.redirect("/book");
-})
+});
 
 function jsonParser(values){
-
-    //Parses JSON sent in form from /book, supporte
-
+    //Parses JSON sent in form inputs
     let objects = [];
     try{
+        //Tries to parse single JSON object
         let value = JSON.parse(values);
-        objects.push(value)
+        objects.push(value);
     }catch(e){
         try{
+            //Tries to parse multiple JSON objects
             for (let i in values) {
                 objects.push(JSON.parse(values[i]));
             }
         }
-        catch(e){}
+        catch(e){
+        }
     }
     return objects;
-}
+};
 
 module.exports = router;

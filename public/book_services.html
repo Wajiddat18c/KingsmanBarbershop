@@ -1,0 +1,60 @@
+<div class="col-md-6">
+  <h3>Book en tid her:</h3>
+  <p id="errormsg" style="display: none;" class="alert alert-warning"></p>
+  <form action="/booking_products" method="POST">
+    <input name="name" class="form-control" id="name" placeholder="navn" required type="text" />
+    <br />
+    <input name="tlf" class="form-control" placeholder="telefon" required type="tel" />
+    <br />
+    <input name="email" class="form-control" placeholder="email" required type="email" />
+    <br />
+    <div>
+        <p class="font-weight-bold">Services:</p>
+        <div id="serviceList"></div>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Fortsæt</button>
+    <script>
+      const services = async () => {
+        let response = await fetch("/services");
+        return await response.json();
+      };
+      services().then(
+        (values) => {
+          for (let i in values) {
+            let val = values[i];
+
+            serviceDiv = document.getElementById("serviceList");
+
+            serviceDiv.innerHTML += `
+                <div>
+                    <input type="checkbox" required name="service" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                        <span>
+                            ${val.name} - ${val.price} kr,-
+                        </span>
+                </div>
+                `;
+            $(function(){
+                var requiredCheckboxes = $('#serviceList :checkbox[required]');
+                requiredCheckboxes.change(function(){
+                    if(requiredCheckboxes.is(':checked')) {
+                        requiredCheckboxes.removeAttr('required');
+                    } else {
+                        requiredCheckboxes.attr('required', 'required');
+                    }
+                });
+            });
+          }
+        },
+        (reject) => {
+          console.log(`Services weren't received correctly, error: ${reject}`);
+        }
+      );
+        if(document.getElementById("error").value)
+        {
+            document.getElementById("errormsg").innerText = document.getElementById("error").value;
+            document.getElementById("errormsg").style = "";
+        }
+    </script>
+  </form>
+</div>
