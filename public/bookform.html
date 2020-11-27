@@ -1,16 +1,17 @@
-
+<div class="col-md-6">
     <h3>
         Book en tid her:
     </h3>
     <form action="/book" method="POST">
+        <br>
         <div>
-            <p>Services:</p>
-            <div id="serviceList">
-
+            <p class="font-weight-bold">Services:</p>
+            <div id="serviceList" class="">
+                    
             </div>
         </div>
         <div>
-            <p>Produkter (Valgfrit):</p>
+            <p class="font-weight-bold">Produkter (Valgfrit):</p>
             <div id="productList">
 
             </div>
@@ -20,14 +21,15 @@
 
             </div>
         </div>
-        <br>
-        <input name="name" id="name" placeholder="navn">
-        <br>
-        <input name="tlf" placeholder="telefon">
-        <br>
-        <input name="email" placeholder="email" type="text">
+        
         <br>
         <input id="daydate" name="timestamp" type="text">
+        <br>
+        <input name="name" class="form-control" id="name" placeholder="navn">
+        <br>
+        <input name="tlf" class="form-control" placeholder="telefon">
+        <br>
+        <input name="email" class="form-control" placeholder="email" type="text">
         <br>
         <button type="submit">Book</button>
     </div>
@@ -95,6 +97,20 @@
                 serviceDiv = document.getElementById("serviceList");
 
                 serviceDiv.innerHTML += `
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                          </div>
+                    </div>
+                    <div class="input-group-append">
+                        <span class="input-group-text">${val.name} - ${val.price} kr,-</span>
+                    </div>
+                </div>
+                `;
+
+                /*
+                serviceDiv.innerHTML += `
                 <div>
                     <input type="checkbox" name="service" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
                         <span>
@@ -102,6 +118,7 @@
                         </span>
                 </div>
                 `;
+                */
             }
 
 
@@ -116,6 +133,20 @@
         products().then((values) => {
             for (let i in values) {
                 let val = values[i];
+                document.getElementById("productList").innerHTML +=
+                `
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                          </div>
+                    </div>
+                    <div class="input-group-append">
+                        <span class="input-group-text">${val.name} - ${val.price} kr,-</span>
+                    </div>
+                </div>
+                `
+                /*
                 document.getElementById("productList").innerHTML +=
                     `<div>
                         <input type="checkbox" name="products" value=' {"id": ${val.id}, "name": "${val.name}", "price": "${val.price}" } '>
@@ -133,9 +164,11 @@
                             <option value="5">5</option>
                         </select>
                     </div>`;
+                    */
             }
         }, (reject) => {
             console.log(`Products weren't received correctly, error: ${reject}`);
         })
 
     </script>
+</div>
