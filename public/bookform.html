@@ -1,4 +1,4 @@
-<div class="col-md-6">
+<div class="col-md-10 offset-md-1">
     <h1>
         Book en tid her:
     </h1>
@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-body">
             <h4 class="font-weight-bold">Produkter (Valgfrit)</h4>
-            <div id="productList">
+            <div id="productList" style="display: none;">
 
             </div>
             </div>
@@ -23,7 +23,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="font-weight-bold">Tidspunkt</h4>
-                <div>
+                <div id="datetime_wrapper" style="display: none;">
                 
                 <div class="form-inline">
                     <input id="daydate" placeholder="Vælg en dag" class="form-control" name="daydate" type="text">
@@ -32,9 +32,11 @@
                 <p>Tidspunkt:</p>
                 <div id="times">(Vælg en dag først)</div>
                 <br>
+                <!--
                 <button type="submit" class="btn btn-success">
                     Næste
                 </button>
+            -->
             </div>
             </div>
         </div>
@@ -45,7 +47,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="font-weight-bold">Kontakt oplysninger</h4>
-                <div>
+                <div style="display: none;" id="contactwrapper">
                 <label for="name">Name: </label>
                 <input name="name" class="form-control" id="name" placeholder="navn">
                 <label for="tlf">Telefon nummer:</label>
@@ -57,7 +59,9 @@
             </div>
         </div>
         <br>
-        <button type="submit" class="btn btn-success">Book</button>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-success btn-lg">Book</button>
+        </div>
     </div>
     </form>
     <script>
@@ -109,6 +113,11 @@
                     }
                         
                 }
+                $(() => {
+                    $(`input[name="timeslot"]`).on("change", (e) => {
+                        $("#contactwrapper").slideDown();
+                    })
+                })
             });
            
 
@@ -127,12 +136,13 @@
                 serviceDiv.innerHTML += `
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                        <div class="input-group-text bg-light">
+                            <input required type="checkbox" name="service" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
                           </div>
                     </div>
                     <div class="input-group-append">
-                        <span class="input-group-text">${val.name} - ${val.price} kr,-</span>
+                        <span class="input-group-text bg-light">${val.name} - ${val.price} kr,-</span>
+                        <span class="input-group-text ">Varighed: ${val.duration} min.</span>
                     </div>
                 </div>
                 `;
@@ -149,7 +159,23 @@
                 */
             }
 
-
+            $(() => {
+                //When service is choosen, products are shown
+                $(`input[name="service"]`).on("change", (e) => {
+                    $("#productList").slideDown()
+                    $("#datetime_wrapper").slideDown()
+                })
+                //If either box is checked the required attribute is removed.
+                var requiredCheckboxes = $('#serviceList :checkbox[required]');
+                requiredCheckboxes.change(function(){
+                    if(requiredCheckboxes.is(':checked')) {
+                        requiredCheckboxes.removeAttr('required');
+                    } else {
+                        requiredCheckboxes.attr('required', 'required');
+                    }
+                });
+            })
+            
             
         }, (reject) => {
             console.log(`Services weren't received correctly, error: ${reject}`);
@@ -165,12 +191,12 @@
                 `
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                        <div class="input-group-text bg-light">
+                            <input required type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
                           </div>
                     </div>
                     <div class="input-group-append">
-                        <span class="input-group-text">${val.name} - ${val.price} kr,-</span>
+                        <span class="input-group-text bg-light">${val.name} - ${val.price} kr,-</span>
                     </div>
                 </div>
                 `
