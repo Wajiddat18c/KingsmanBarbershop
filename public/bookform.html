@@ -1,37 +1,63 @@
 <div class="col-md-6">
-    <h3>
+    <h1>
         Book en tid her:
-    </h3>
+    </h1>
     <form action="/book" method="POST">
         <br>
-        <div>
-            <p class="font-weight-bold">Services:</p>
+        <div class="card">
+            <div class="card-body">
+            <h4 class="font-weight-bold">Services</h4>
             <div id="serviceList" class="">
                     
             </div>
+            </div>
         </div>
-        <div>
-            <p class="font-weight-bold">Produkter (Valgfrit):</p>
+        <div class="card">
+            <div class="card-body">
+            <h4 class="font-weight-bold">Produkter (Valgfrit)</h4>
             <div id="productList">
 
             </div>
+            </div>
         </div>
-        <div>
-            <div id="times">
-
+        <div class="card">
+            <div class="card-body">
+                <h4 class="font-weight-bold">Tidspunkt</h4>
+                <div>
+                
+                <div class="form-inline">
+                    <input id="daydate" placeholder="Vælg en dag" class="form-control" name="daydate" type="text">
+                </div>
+                <br>
+                <p>Tidspunkt:</p>
+                <div id="times">(Vælg en dag først)</div>
+                <br>
+                <button type="submit" class="btn btn-success">
+                    Næste
+                </button>
+            </div>
             </div>
         </div>
         
+        
+        <!--<input id="daydate" class="form-control" name="timestamp" type="text">-->
+        
+        <div class="card">
+            <div class="card-body">
+                <h4 class="font-weight-bold">Kontakt oplysninger</h4>
+                <div>
+                <label for="name">Name: </label>
+                <input name="name" class="form-control" id="name" placeholder="navn">
+                <label for="tlf">Telefon nummer:</label>
+                <input name="tlf" class="form-control" placeholder="telefon">
+                <label for="email">E-mail:</label>
+                <input name="email" class="form-control" placeholder="email" type="text">
+                </div>
+                
+            </div>
+        </div>
         <br>
-        <input id="daydate" name="timestamp" type="text">
-        <br>
-        <input name="name" class="form-control" id="name" placeholder="navn">
-        <br>
-        <input name="tlf" class="form-control" placeholder="telefon">
-        <br>
-        <input name="email" class="form-control" placeholder="email" type="text">
-        <br>
-        <button type="submit">Book</button>
+        <button type="submit" class="btn btn-success">Book</button>
     </div>
     </form>
     <script>
@@ -73,10 +99,12 @@
                     }
                     if(available)
                     {
+                        timeStr = `${dt.getHours()}:${dt.getMinutes().toString().length > 1 ? dt.getMinutes() : dt.getMinutes()+"0"}`;
                         document.getElementById("times").innerHTML += `
-                        <button>
-                            ${dt.getHours()}:${dt.getMinutes()}
-                        </button>
+                        <label class="btn btn-outline-primary">
+                            <input type="radio" id="timeslot" name="timeslot" value="${timeStr}"> 
+                            ${timeStr}
+                        </label>
                         `;
                     }
                         
@@ -166,6 +194,11 @@
                     </div>`;
                     */
             }
+            $(() => {
+                $(".font-weight-bold").on("click", function(e){
+                    $(e.target.nextElementSibling).slideToggle()
+                }) 
+            })
         }, (reject) => {
             console.log(`Products weren't received correctly, error: ${reject}`);
         })

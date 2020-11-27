@@ -46,6 +46,8 @@
                     }
                     if(available)
                     {
+                        console.log(start.getMinutes());
+                        console.log("len: "+start.getMinutes().toString().length);
                         document.getElementById("times").innerHTML += `
                         <label class="btn btn-outline-primary">
                             <input type="radio" id="timeslot" name="timeslot" value="${start.getHours()}:${start.getMinutes()}"> 
