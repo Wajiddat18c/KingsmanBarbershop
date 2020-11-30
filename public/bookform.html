@@ -1,6 +1,6 @@
 <div class="col-md-10 offset-md-1">
     <h1>
-        Book en tid her:
+        Book en tid her
     </h1>
     <form action="/book" method="POST">
         <br>
@@ -192,11 +192,21 @@
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <div class="input-group-text bg-light">
-                            <input required type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
+                            <input required type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}, "count": 1}'>
                           </div>
                     </div>
                     <div class="input-group-append">
                         <span class="input-group-text bg-light">${val.name} - ${val.price} kr,-</span>
+                        <span class="input-group-text">
+                        Antal: 
+                        </span>
+                        <select name="count" class="count">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
                     </div>
                 </div>
                 `
@@ -224,7 +234,16 @@
                 $(".font-weight-bold").on("click", function(e){
                     $(e.target.nextElementSibling).slideToggle()
                 }) 
+                $(".count").change(function(e){
+                    const prod = e.target.parentElement.parentElement.children[0].children[0].children[0]
+                    
+                    obj_to_change = JSON.parse(prod.value);
+                    obj_to_change.count = e.target.value
+                    //console.log(obj_to_change);
+                    prod.value = JSON.stringify(obj_to_change);
+                });
             })
+
         }, (reject) => {
             console.log(`Products weren't received correctly, error: ${reject}`);
         })
