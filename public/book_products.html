@@ -34,9 +34,7 @@
                             <option value="5">5</option>
                         </select>
                     </div>`;
-            }
-            $(() => {
-                $(".count").change(function(e){
+            }$(".count").change(function(e){
                     const prod = e.target.parentElement.childNodes[1];
                     
                     obj_to_change = JSON.parse(prod.value);
@@ -44,6 +42,8 @@
                     //console.log(obj_to_change);
                     prod.value = JSON.stringify(obj_to_change);
                 });
+            $(() => {
+                
             })
         }, (reject) => {
             console.log(`Products weren't received correctly, error: ${reject}`);

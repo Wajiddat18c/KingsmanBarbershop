@@ -63,6 +63,29 @@ function validate_services(req, res){
         return res.redirect("/booking/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
     }
 };
+function validate_booking(req, res){
+    /*
+    That regex will check that the mail address is a non-space separated sequence of characters of length greater than one,
+    followed by an @, followed by two sequences of non-spaces characters of length two or more separated by a .
+    */
+   try{
+    if(!req.body.email.match(/^\S{1,}@\S{2,}\.\S{2,}$/))
+        return res.redirect("/booking/Ugyldig E-mail");
+    //Regex matches 8 digits
+    if(!req.body.tlf.match(/^\d{8}$/))
+        return res.redirect("/booking/"+encodeURIComponent("Ugyldigt telefon nummer, format, 8x# : ########"));
+    //Regex matches word(s) that's atleast 2 characters
+    if(!req.body.name.match(/^\w{2,}$/))
+        return res.redirect("/booking/Skriv venligst et navn på minimum 2 bogstaver.");
+    //Checks if there's atleast 1 choosen service
+    if(req.body.services.length<1)
+        return res.redirect("/booking/Vælg mindst 1 service.");
+    }
+    catch(error){
+        console.log(error);
+        return res.redirect("/booking/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
+    }
+};
 
 router.post("/booking_products", async (req, res) => {
     req.session.email = escape(req.body.email);
@@ -165,11 +188,12 @@ router.post("/book", async (req, res) => {
     //Indsæt products
     //Nævn alle services, beregn pris og produkter i mail
     //Eventuelt cancel link
-
+    //validate_booking(req, res);
     const email = escape(req.body.email);
     const name = escape(req.body.name);
     const tlf = escape(req.body.tlf);
-    const timestamp = escape(req.body.timestamp);
+    //const timestamp = escape(req.body.timestamp);
+    const timestamp = escape(req.body.daydate)+" "+escape(req.body.timeslot);
     const services = jsonParser(req.body.service);
     const products = jsonParser(req.body.products);
 
@@ -219,7 +243,7 @@ router.post("/book", async (req, res) => {
             mail_products_html += product_str + "<br>";
             await BookingProducts.query().insert({
                 booking_id: appointment.id,
-                amount: 1,
+                amount: escape(product.count),
                 product_id: escape(product.id)
             });
             
