@@ -26,6 +26,10 @@ const Service = require('../models/Service');
 router.get("/book", async (req, res) => {
     return res.send(header+bookFormPage+footer);
 });
+router.get("/book/:error", async (req, res) => {
+    const error = escape(req.params.error);
+    return res.send(header+`<input type="hidden" value="${error}" id="error" />`+bookFormPage+footer);
+});
 
 router.get("/unavailable_times", async(req, res) => {
     return res.send(await Booking.query().select("id", "service_id", "start_time").whereRaw("DATE(start_time)>CURRENT_TIMESTAMP()"));
@@ -63,27 +67,27 @@ function validate_services(req, res){
         return res.redirect("/booking/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
     }
 };
-function validate_booking(req, res){
+async function validate_booking(req, res){
     /*
     That regex will check that the mail address is a non-space separated sequence of characters of length greater than one,
     followed by an @, followed by two sequences of non-spaces characters of length two or more separated by a .
     */
    try{
     if(!req.body.email.match(/^\S{1,}@\S{2,}\.\S{2,}$/))
-        return res.redirect("/booking/Ugyldig E-mail");
+        return res.redirect("/book/Ugyldig E-mail");
     //Regex matches 8 digits
     if(!req.body.tlf.match(/^\d{8}$/))
-        return res.redirect("/booking/"+encodeURIComponent("Ugyldigt telefon nummer, format, 8x# : ########"));
+        return res.redirect("/book/"+encodeURIComponent("Ugyldigt telefon nummer, format, 8x# : ########"));
     //Regex matches word(s) that's atleast 2 characters
     if(!req.body.name.match(/^\w{2,}$/))
-        return res.redirect("/booking/Skriv venligst et navn på minimum 2 bogstaver.");
+        return res.redirect("/book/Skriv venligst et navn på minimum 2 bogstaver.");
     //Checks if there's atleast 1 choosen service
-    if(req.body.services.length<1)
-        return res.redirect("/booking/Vælg mindst 1 service.");
+    if(req.body.service.length<1)
+        return res.redirect("/book/Vælg mindst 1 service.");
     }
     catch(error){
         console.log(error);
-        return res.redirect("/booking/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
+        return res.redirect("/book/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
     }
 };
 
@@ -182,13 +186,12 @@ router.post("/booking", async (req, res) => {
 })
 
 router.post("/book", async (req, res) => {
-
     //Noter test korrekte formater for data, eventuelt om kunden allerede findes, 
     //Fjern eventuelt service_id kolonne fra booking tabel
     //Indsæt products
     //Nævn alle services, beregn pris og produkter i mail
     //Eventuelt cancel link
-    //validate_booking(req, res);
+    await validate_booking(req, res);
     const email = escape(req.body.email);
     const name = escape(req.body.name);
     const tlf = escape(req.body.tlf);

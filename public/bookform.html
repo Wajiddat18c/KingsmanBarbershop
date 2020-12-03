@@ -2,6 +2,7 @@
     <h1>
         Book en tid her
     </h1>
+    <p id="errormsg" style="display: none;" class="alert alert-warning"></p>
     <form action="/book" method="POST">
         <br>
         <div class="card">
@@ -192,7 +193,7 @@
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <div class="input-group-text bg-light">
-                            <input required type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}, "count": 1}'>
+                            <input name="products" type="checkbox" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}, "count": 1}'>
                           </div>
                     </div>
                     <div class="input-group-append">
@@ -248,5 +249,15 @@
             console.log(`Products weren't received correctly, error: ${reject}`);
         })
 
+        try{
+            $(()=> {
+                if($("#error").val()){
+                    $("#errormsg").text($("#error").val());
+                    $("#errormsg").css("display", "block");
+                }
+            })
+            
+        }
+        catch{}
     </script>
 </div>
