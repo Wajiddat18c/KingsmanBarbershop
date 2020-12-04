@@ -33,6 +33,8 @@ const serviceRoute = require("./routes/services");
 app.use(serviceRoute);
 const productRoute = require("./routes/products");
 app.use(productRoute);
+const newsletterRoute = require("./routes/newsletter");
+app.use(newsletterRoute);
 
 const authRoute = require("./routes/auth");
 app.use(authRoute);
