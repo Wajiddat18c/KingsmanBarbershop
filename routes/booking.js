@@ -6,7 +6,11 @@ const nodemailer = require('nodemailer');
 const twilioCreds = require('../config/twilioCreds');
 const twillio = require('twilio')(twilioCreds.sid, twilioCreds.auth_token);
 
+const bcrypt = require("bcrypt");
+const saltRounds = 12;
+
 const Customer = require('../models/Customer');
+const User = require("../models/User");
 const Booking = require('../models/Booking');
 const BookingServices = require('../models/BookingServices');
 const BookingProducts = require('../models/BookingProducts');
@@ -194,12 +198,79 @@ router.post("/book", async (req, res) => {
     await validate_booking(req, res);
     const email = escape(req.body.email);
     const name = escape(req.body.name);
+    const password = escape(req.body.password);
     const tlf = escape(req.body.tlf);
     //const timestamp = escape(req.body.timestamp);
     const timestamp = escape(req.body.daydate)+" "+escape(req.body.timeslot);
     const services = jsonParser(req.body.service);
     const products = jsonParser(req.body.products);
-
+        if(password == undefined){
+            console.log("pw", password);
+            console.log(password.length);
+            if (password.length < 8) {
+                return res
+                  .status(400)
+                  .send({ response: "Password must be atleast 8 char long" });
+              } else {
+                try {
+                  User.query()
+                    .select("name")
+                    .where("name", name)
+                    .orWhere("email", email)
+                    .orWhere("tlf", tlf)
+                    .limit(1)
+                    .then(async (foundUser) => {
+                      if (foundUser.length > 0) {
+                        return res.status(400).send({ response: "User already exists" });
+                      } else {
+                        const hashedPassword = await bcrypt.hash(password, saltRounds);
+          
+                        const newUser = await User.query().insert({
+                          name: name,
+                          password: hashedPassword,
+                          email: email,
+                          tlf: tlf
+                        });
+          
+                        var mailOptions = {
+                          from: '"Kingsman Barbershop" <wajidnodemailer@gmail.com>', // sender address (who sends)
+                          to: `${name} <${email}>`, // list of receivers (who receives)
+                          subject: `Bekræftelse på tidsbestilling`, // Subject line
+                          text: `Hej ${name},
+                          
+                          Her er en bekræftelse på din registering hos Kingsman barbershop,
+                          
+                          Hav en god dag.`, // plaintext body
+                          html:
+                              `Hej ${name}, 
+                              <br>
+                              <br>Her er en bekræftelse på din registering hos Kingsman barbershop
+                              <br>
+                              <br>Hav en god dag.`, // html body
+                      };
+                      
+                      // -----------
+                      // Send e-mail
+                      // -----------
+                      var transporter = nodemailer.createTransport(mailCreds);
+                      transporter.sendMail(mailOptions, (error, info) => {
+                          if (error) {
+                            return console.log(error);
+                          }
+                        
+                          console.log("Message sent: " + info.response);
+                      });
+          
+                        return res.redirect("/");
+                      }
+                    });
+                } catch (error) {
+                  return res
+                    .status(500)
+                    .send({ response: "Something went wrong with the database" });
+                }
+              }
+            }
         //Insert customer
         const customer = await Customer.query().insert({
             name: name,
@@ -287,7 +358,7 @@ router.post("/book", async (req, res) => {
                 <br>
                 <br>Hav en god dag.`, // html body
         };
-        /*
+        
         // -----------
         // Send e-mail
         // -----------
@@ -299,7 +370,7 @@ router.post("/book", async (req, res) => {
           
             console.log("Message sent: " + info.response);
         });
-        */
+        
         // --------
         // Send SMS
         // --------

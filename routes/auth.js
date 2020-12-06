@@ -6,10 +6,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 12;
 const nodemailer = require('nodemailer');
 
-
-const { v4: uuidv4 } = require('uuid');
-
-
 const fs = require("fs");
 
 
