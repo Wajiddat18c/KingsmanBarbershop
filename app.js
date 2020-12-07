@@ -58,10 +58,11 @@ const footerPage = fs.readFileSync(
     "utf8"
   );
 
-app.get("/", (req, res) => {
-	console.log("Hej med dig!");
-	res.send(headerPage + "HELLO! NO HTML HERE!" + footerPage);
-});
+//index page moved to auth.js
+//   app.get("/", (req, res) => {
+// 	console.log("Hej med dig!");
+// 	res.send(headerPage + "HELLO! NO HTML HERE!" + footerPage);
+// });
 
 const nodemailer = require("nodemailer");
 const { options } = require("./routes/booking");

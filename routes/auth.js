@@ -36,6 +36,11 @@ const footerPage = fs.readFileSync(
   const loginPage = fs.readFileSync(
     __dirname + '/../public/login.html', "utf8");
 
+    const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
+    const userIndexPage = fs.readFileSync(__dirname + '/../public/userlogin/user_index.html', "utf8");
+    
+    
+
 
     //SIGN UP 
   router.get("/signup", (req, res) => {
@@ -152,7 +157,7 @@ const footerPage = fs.readFileSync(
                   req.session.isOn = true;
                   req.session.email = email;
                   req.session.password = password;
-                  return res.redirect("/logintest");
+                  return res.redirect("/");
                 } else {
                   console.log(req.ip + " typed a wrong password");
                   return res.send({ response: "Wrong password!" });
@@ -174,11 +179,11 @@ const footerPage = fs.readFileSync(
     }
   });
 
-  router.get("/logintest", (req, res) => {
+  router.get("/", (req, res) => {
     if (req.session.isOn === true) {
-      return res.send ( headerPage + loginsuccessPage + footerPage);
+      return res.send ( userHeader + userIndexPage + footerPage);
     }else{
-      return res.send ("Login First!");
+      return res.send (headerPage + "index page here" + footerPage);
 
     }
 

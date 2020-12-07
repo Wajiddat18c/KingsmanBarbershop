@@ -25,9 +25,17 @@ const booking_dates = fs.readFileSync(__dirname+'/../public/book_dates.html', 'u
 const mailCreds = require("../config/mailCreds");
 const Service = require('../models/Service');
 
+const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
+const userBookFromPage = fs.readFileSync(__dirname + '/../public/userlogin/user_bookform.html', "utf8");
 
 
 router.get("/book", async (req, res) => {
+    //userlogin
+    if (req.session.isOn === true) {
+        return res.send(userHeader+userBookFromPage+footer);
+
+    }
+
     return res.send(header+bookFormPage+footer);
 });
 router.get("/book/:error", async (req, res) => {
@@ -204,6 +212,9 @@ router.post("/book", async (req, res) => {
     const timestamp = escape(req.body.daydate)+" "+escape(req.body.timeslot);
     const services = jsonParser(req.body.service);
     const products = jsonParser(req.body.products);
+
+
+
         if(password == undefined){
             console.log("pw", password);
             console.log(password.length);
