@@ -109,7 +109,9 @@ const footerPage = fs.readFileSync(
                 
                   console.log("Message sent: " + info.response);
               });
-  
+                req.session.isOn = true;
+                req.session.email = email;
+                req.session.password = password;
                 return res.send(headerPage + signupsuccessPage + footerPage);
               }
             });
