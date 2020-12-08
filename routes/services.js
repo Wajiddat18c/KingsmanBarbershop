@@ -17,7 +17,10 @@ const footerPage = fs.readFileSync(
     __dirname + '/../public/services.html', 
     "utf8"
   );
-
+  const UserheaderPage = fs.readFileSync(
+    __dirname + '/../public/userlogin/user_header.html', 
+    "utf8"
+  );
 router.get("/services", async (req, res) => {
     return res.send(await Service.query().select());
 });
@@ -31,6 +34,10 @@ router.delete("/services/", async (req, res) => {
 });
 
 router.get("/showservices", async (req, res) => {
+  if (req.session.isOn === true) {
+    return res.send(UserheaderPage + showService + footerPage);
+
+  }
     return res.send(headerPage + showService + footerPage);
 });
 

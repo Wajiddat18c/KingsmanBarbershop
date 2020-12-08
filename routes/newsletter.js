@@ -19,8 +19,16 @@ const footerPage = fs.readFileSync(
     __dirname + '/../public/newsletter_signup.html', 
     "utf8"
   );
+  const UserheaderPage = fs.readFileSync(
+    __dirname + '/../public/userlogin/user_header.html', 
+    "utf8"
+  );
 
   router.get("/newsletter", (req, res) => {
+    if (req.session.isOn === true) {
+      return res.send(UserheaderPage + newsletterSignUpPage + footerPage);
+
+    }
     return res.send(headerPage + newsletterSignUpPage + footerPage);
   });
 
