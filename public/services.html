@@ -1,0 +1,51 @@
+<h3>
+    Ydelser priser
+</h3>
+
+<div id="serviceList" class="">
+
+    
+</div>
+<script>
+
+ const services = async () => {
+            let response = await fetch("/services");
+            return await response.json();
+        };
+        services().then((values) => {
+            
+            for(let i in values){
+                let val = values[i];
+                
+                serviceDiv = document.getElementById("serviceList");
+
+                serviceDiv.innerHTML += `
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Navn</th>
+                    <th scope="col">Pris</th>
+                    <th scope="col">Varighed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th >${val.id}</th>
+                    <td>${val.name}</td>
+                    <td> ${val.price}</td>
+                    <td>${val.duration}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+                `;
+            }
+        }, (reject) => {
+            console.log(`Services weren't received correctly, error: ${reject}`);
+        });
+
+</script>
