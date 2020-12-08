@@ -2,6 +2,7 @@ const Service = require('../models/Service');
 const router = require('express').Router();
 
 const fs = require("fs");
+const escape = require("escape-html");
 
 
 const footerPage = fs.readFileSync(
@@ -19,6 +20,14 @@ const footerPage = fs.readFileSync(
 
 router.get("/services", async (req, res) => {
     return res.send(await Service.query().select());
+});
+
+router.delete("/services/", async (req, res) => {
+  const id = escape(req.body.id);
+  //Checks if it was deleted
+  if(await Service.query().deleteById(id) == 1)
+    return res.send("Service deleted succesfully.");
+  return res.send("Error deleting service.");
 });
 
 router.get("/showservices", async (req, res) => {

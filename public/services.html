@@ -2,50 +2,74 @@
     Ydelser priser
 </h3>
 
-<div id="serviceList" class="">
-
-    
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">Navn</th>
+        <th scope="col">Pris</th>
+        <th scope="col">Varighed</th>
+        <th scope="col">Handlinger</th>
+        </tr>
+    </thead>
+    <tbody id="servicelist">
+    </tbody>
+    </table>
 </div>
 <script>
 
- const services = async () => {
-            let response = await fetch("/services");
-            return await response.json();
-        };
-        services().then((values) => {
-            
-            for(let i in values){
-                let val = values[i];
-                
-                serviceDiv = document.getElementById("serviceList");
+function refresh_services(values){
+    for(let i in values){
+        let val = values[i];
+        
+        service_body = document.getElementById("servicelist");
 
-                serviceDiv.innerHTML += `
+        service_body.innerHTML += `
+            <tr>
+            <td>${val.id}</td>
+            <td>${val.name}</td>
+            <td> ${val.price}</td>
+            <td>${val.duration}</td>
+            <td>
+                <button class="btn btn-danger delete_button" data-id="${val.id}">
+                    Slet
+                </button>
+                <a href="/edit_service/${val.id}" class="btn btn-primary">
+                    Ret
+                </a>
+            </td>
+            </tr>
+        `;
+    }
 
-                <table class="table">
-                    <thead>
-                    <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Navn</th>
-                    <th scope="col">Pris</th>
-                    <th scope="col">Varighed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <th >${val.id}</th>
-                    <td>${val.name}</td>
-                    <td> ${val.price}</td>
-                    <td>${val.duration}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-
-                `;
+    $(".delete_button").on("click", (event) =>{
+        let id = $(event.target).data("id");
+        $.ajax({
+            type: "DELETE",
+            url: "/services",
+            data: `id=${id}`,
+            success: (msg) => {
+                if(!msg.startsWith("Error")){
+                    $(event.target).parentsUntil("tbody").last().remove();
+                };
+                console.log(msg);
             }
-        }, (reject) => {
-            console.log(`Services weren't received correctly, error: ${reject}`);
         });
+    });
+}
+
+    const services = async () => {
+        let response = await fetch("/services");
+        return await response.json();
+    };
+
+    //Load services
+    services().then((values) => {
+        refresh_services(values)
+        
+    }, (reject) => {
+        console.log(`Services weren't received correctly, error: ${reject}`);
+    });
 
 </script>
