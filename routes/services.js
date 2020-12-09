@@ -37,13 +37,15 @@ router.get("/showservices", async (req, res) => {
   else if (req.session.isOn === true) {
     return res.send(UserheaderPage + showService + footerPage);
   }
-  return res.send(headerPage + adminService + footerPage);
+  return res.send(headerPage + showService + footerPage);
 });
 router.get("/services", async (req, res) => {
   return res.send(await Service.query().select());
 });
 
 router.post("/services/", async (req, res) => {
+  if(req.session.isOn !== true)
+    res.redirect("/services")
   console.log(req.body);
   //const {name, price, duration, description} = req.body
   //Checks if it was deleted
@@ -56,6 +58,8 @@ router.post("/services/", async (req, res) => {
   
 });
 router.put("/services/", async (req, res) => {
+  if(req.session.isOn !== true)
+    res.redirect("/services")
   const id = escape(req.body.id);
   const name = escape(req.body.name);
   const price = escape(req.body.price);
@@ -74,6 +78,8 @@ router.put("/services/", async (req, res) => {
     return res.send("Error deleting service.");
 });
 router.delete("/services/", async (req, res) => {
+  if(req.session.isOn !== true)
+    res.redirect("/services")
   const id = escape(req.body.id);
   //Checks if it was deleted
   if ((await Service.query().deleteById(id)) == 1)
@@ -81,7 +87,10 @@ router.delete("/services/", async (req, res) => {
   return res.send("Error deleting service.");
 });
 router.patch("/services", async(req, res) => {
-  return "fail";
+  //Create a patch to edit availability on services.
+  if(req.session.isOn !== true)
+    res.redirect("/services")
+  return res.send("fail");
 });
 
 
