@@ -38,7 +38,9 @@ const footerPage = fs.readFileSync(
 
     const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
     const userIndexPage = fs.readFileSync(__dirname + '/../public/userlogin/user_index.html', "utf8");
-    
+    const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
+    const adminIndexPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_index.html', "utf8");
+
     
 
 
@@ -155,10 +157,20 @@ const footerPage = fs.readFileSync(
             bcrypt
               .compare(password, hashpassword)
               .then((result) => {
-                if (result === true) {
+                //admin email: kingsmanBS@gmail.com
+                //admin pw: admin123
+                if (result === true && email == "kingsmanBS@gmail.com" ){
+                  req.session.adminTrue = true;
+                  req.session.email = email;
+                  req.session.password = password;
+                  return res.redirect("/");
+
+                }
+                else if (result === true) {
                   req.session.isOn = true;
                   req.session.email = email;
                   req.session.password = password;
+
                   return res.redirect("/");
                 } else {
                   console.log(req.ip + " typed a wrong password");
@@ -182,7 +194,12 @@ const footerPage = fs.readFileSync(
   });
 
   router.get("/", (req, res) => {
-    if (req.session.isOn === true) {
+    if (req.session.adminTrue === true){
+
+    return res.send(adminHeader + adminIndexPage + footerPage);
+    }
+
+    else if (req.session.isOn === true) {
       return res.send ( userHeader + userIndexPage + footerPage);
     }else{
       return res.send (headerPage + "index page here" + footerPage);

@@ -23,9 +23,23 @@ const footerPage = fs.readFileSync(
     __dirname + '/../public/userlogin/user_header.html', 
     "utf8"
   );
+  const AdminheaderPage = fs.readFileSync(
+    __dirname + '/../public/adminlogin/admin_header.html', 
+    "utf8"
+  );
+  const AdminNewsletterPage = fs.readFileSync(
+    __dirname + '/../public/adminlogin/admin_newsletter.html', 
+    "utf8"
+  );
 
   router.get("/newsletter", (req, res) => {
-    if (req.session.isOn === true) {
+        //adminlogin
+        if (req.session.adminTrue === true) {
+          return res.send(AdminheaderPage+AdminNewsletterPage+footerPage);
+  
+      } 
+      //userlogin
+    else if (req.session.isOn === true) {
       return res.send(UserheaderPage + newsletterSignUpPage + footerPage);
 
     }

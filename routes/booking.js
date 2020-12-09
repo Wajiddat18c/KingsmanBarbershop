@@ -27,11 +27,18 @@ const Service = require('../models/Service');
 
 const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
 const userBookFromPage = fs.readFileSync(__dirname + '/../public/userlogin/user_bookform.html', "utf8");
+const adminBookPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_book.html', "utf8");
+const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 
 
 router.get("/book", async (req, res) => {
+    //adminlogin
+    if (req.session.adminTrue === true) {
+        return res.send(adminHeader+adminBookPage+footer);
+
+    }
     //userlogin
-    if (req.session.isOn === true) {
+    else if (req.session.isOn === true) {
         return res.send(userHeader+userBookFromPage+footer);
 
     }
