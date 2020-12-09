@@ -12,6 +12,7 @@
             </tr>
         </thead>
         <tbody id="servicelist">
+
         </tbody>
     </table>
 </div>
@@ -25,9 +26,9 @@
             service_body.innerHTML += `
             <tr>
                 <td>${val.id}</td>
-                <td>${val.name}</td>
-                <td> ${val.price}</td>
-                <td>${val.duration}</td>
+                <td class="service_name">${val.name}</td>
+                <td class="service_price"> ${val.price}</td>
+                <td class="service_duration">${val.duration}</td>
                 <td>
                     <button class="btn btn-danger delete-item" data-id="${val.id}">
                         Slet
@@ -37,7 +38,6 @@
                     </button>
                 </td>
             </tr>
-            
             <tr style="display:none;">
                 <td>
                 </td>
@@ -58,7 +58,7 @@
                 </td>
                 <td>
                     <div style="display:none">
-                    <button class="btn btn-success save-item">Gem</button>
+                    <button class="btn btn-success save-item" data-id="${val.id}">Gem</button>
                     <button class="btn btn-warning cancel-changes">Luk</button>
                     </div>
                 </td>
@@ -81,12 +81,37 @@
             });
         });
         $(".edit-item").on("click", (event) => {
-            $(event.target).parentsUntil("tbody").last().next("tr").slideDown();
-            $(event.target).parentsUntil("tbody").last().next("tr").children("td").children("div").slideDown();
+            $(event.target).parentsUntil("tbody").last().next("tr").slideToggle();
+            $(event.target).parentsUntil("tbody").last().next("tr").children("td").children("div").slideToggle();
         });
         $(".cancel-changes").on("click", (event) => {
-            $(event.target).parentsUntil("tbody").last().slideToggle();
-            $(event.target).parentsUntil("tbody").last().children().slideToggle();
+            $(event.target).parentsUntil("tbody").last().slideUp();
+            $(event.target).parentsUntil("tbody").last().children("td").children("div").slideUp();
+        });
+        $(".save-item").on("click", (event) => {
+
+            let id = $(event.target).data("id");
+            let row = $(event.target).parentsUntil("tbody").last();
+            let name = row.find(".service_name").val();
+            let price = row.find(".service_price").val();
+            let duration = row.find(".service_duration").val();
+            let data = {id: id, name: name, duration : duration, price: price,}
+            $.ajax({
+                type: "PUT",
+                url: "/services",
+                data: data,
+                success: (msg) => {
+                    if (!msg.startsWith("Error")) {
+                        //$(event.target).parentsUntil("tbody").last().remove();
+                    }
+                    console.log(msg);
+                    row.prev("tr").children(".service_name").text(name)
+                    row.prev("tr").children(".service_duration").text(duration)
+                    row.prev("tr").children(".service_price").text(price)
+                    $(event.target).parentsUntil("tbody").last().slideUp();
+                    $(event.target).parentsUntil("tbody").last().children("td").children("div").slideUp();
+                },
+            });
         });
     }
     
