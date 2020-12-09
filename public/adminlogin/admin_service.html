@@ -1,11 +1,42 @@
-<h3>Ydelser priser</h3>
+<h1>Service administration</h1>
+<p>
+    Her kan du adminstrere de services der tilbydes på hjemmesiden.
+</p>
 
 <div>
+    <h3>Opret service</h3>
+    <table class="table form form-inline">
+                <tr>
+                    <td>
+                    <input class="form-control" placeholder="Navn", id="navn" >
+                </td>
+                <td>
+                    <textarea class="form-control" placeholder="Beskrivelse", id="beskrivelse"></textarea>
+                </td>
+                <td>
+                    <input class="form-control" placeholder="Pris", id="pris">
+                </td>
+                <td>
+                    <input class="form-control" placeholder="Varighed", id="varighed">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2">
+                    <button class="btn btn-lg btn-success create-item">Opret</button>
+                </td>
+                <td></td>
+            </tr>
+</table>
+</div>
+<div>
+    <h3>Her er eksisterende services, ret, slet og læs dem efter behov.</h3>
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Navn</th>
+                <th scope="col">Beskrivelse</th>
                 <th scope="col">Pris</th>
                 <th scope="col">Varighed</th>
                 <th scope="col">Handlinger</th>
@@ -17,23 +48,35 @@
     </table>
 </div>
 <script>
-    function refresh_services(values) {
+    function render_services(values) {
+        document.getElementById("servicelist").innerHTML = "";
         for (let i in values) {
             let val = values[i];
+            append_service(val)
             
-            service_body = document.getElementById("servicelist");
             
-            service_body.innerHTML += `
+
+        }
+        
+
+    }
+    let services = async () => {
+        let response = await fetch("/services");
+        return await response.json();
+    };
+    function append_service(service){
+        document.getElementById("servicelist").innerHTML += `
             <tr>
-                <td>${val.id}</td>
-                <td class="service_name">${val.name}</td>
-                <td class="service_price"> ${val.price}</td>
-                <td class="service_duration">${val.duration}</td>
+                <td>${service.id}</td>
+                <td class="service_name">${service.name}</td>
+                <td class="service_description"> ${service.description}</td>
+                <td class="service_price"> ${service.price}</td>
+                <td class="service_duration">${service.duration}</td>
                 <td>
-                    <button class="btn btn-danger delete-item" data-id="${val.id}">
+                    <button class="btn btn-danger delete-item" data-id="${service.id}">
                         Slet
                     </button>
-                    <button class="btn btn-primary edit-item" data-service='${val}'>
+                    <button class="btn btn-primary edit-item" data-service='${service}'>
                         Ret
                     </button>
                 </td>
@@ -43,30 +86,46 @@
                 </td>
                 <td>
                     <div style="display: none">
-                        <input class="form-control service_name" value="${val.name}" />
-                    </div>
-                </td>
-                <td><div style="display: none">
-                        <input class="form-control service_price" value="${val.price}" />
+                        <input class="form-control service_name" value="${service.name}" />
                     </div>
                 </td>
                 <td>
                     <div style="display: none">
-                        <input class="form-control service_duration" value="${val.duration}" />
+                        <textarea class="form-control service_description">${service.description}</textarea>
+                    </div>
+                </td>
+                <td><div style="display: none">
+                        <input class="form-control service_price" value="${service.price}" />
+                    </div>
+                </td>
+                <td>
+                    <div style="display: none">
+                        <input class="form-control service_duration" value="${service.duration}" />
                     </div>
                 </td>
                 </td>
                 <td>
                     <div style="display:none">
-                    <button class="btn btn-success save-item" data-id="${val.id}">Gem</button>
+                    <button class="btn btn-success save-item" data-id="${service.id}">Gem</button>
                     <button class="btn btn-warning cancel-changes">Luk</button>
                     </div>
                 </td>
             </tr>
             `;
-        }
-        
-        $(".delete-item").on("click", (event) => {
+    }
+    async function load_services()
+    {
+        //Load services
+        await services().then(
+        (values) => {
+            render_services(values);
+        },
+        (reject) => {
+            console.log(`Services weren't received correctly, error: ${reject}`);
+        });
+    }
+    load_services().then(e => {
+    $(".delete-item").on("click", (event) => {
             let id = $(event.target).data("id");
             $.ajax({
                 type: "DELETE",
@@ -95,7 +154,8 @@
             let name = row.find(".service_name").val();
             let price = row.find(".service_price").val();
             let duration = row.find(".service_duration").val();
-            let data = {id: id, name: name, duration : duration, price: price,}
+            let description = row.find(".service_description").val();
+            let data = {id: id, name: name, duration : duration, price: price, description: description};
             $.ajax({
                 type: "PUT",
                 url: "/services",
@@ -107,26 +167,35 @@
                     console.log(msg);
                     row.prev("tr").children(".service_name").text(name)
                     row.prev("tr").children(".service_duration").text(duration)
+                    row.prev("tr").children(".service_description").text(description);
                     row.prev("tr").children(".service_price").text(price)
                     $(event.target).parentsUntil("tbody").last().slideUp();
                     $(event.target).parentsUntil("tbody").last().children("td").children("div").slideUp();
                 },
             });
         });
-    }
-    
-    const services = async () => {
-        let response = await fetch("/services");
-        return await response.json();
-    };
-    
-    //Load services
-    services().then(
-    (values) => {
-        refresh_services(values);
-    },
-    (reject) => {
-        console.log(`Services weren't received correctly, error: ${reject}`);
-    }
-    );
+        $(".create-item").on("click", event => {
+            let data = {
+                name: $("#navn").val(),
+                price: $("#pris").val(),
+                description: $("#beskrivelse").val(),
+                duration: $("#varighed").val(),
+                available: 1
+            }
+            $.ajax({
+                type: "POST",
+                url: "/services",
+                data: data,
+                success: (msg) => {
+                    if(!msg == typeof "" && !msg.startsWith("Error")){
+                        console.log(msg);
+                        append_service(msg)
+                    }
+                    else{
+                        console.log(msg);
+                        load_services();
+                    }
+                },
+            });
+        })})
 </script>
