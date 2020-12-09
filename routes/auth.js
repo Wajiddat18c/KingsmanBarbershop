@@ -132,7 +132,7 @@ const footerPage = fs.readFileSync(
 
   router.get("/logout", (req, res) => {
     req.session.isOn = false;
-  
+    req.session.adminTrue = false;
     return res.redirect("/");
   });
   
