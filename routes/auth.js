@@ -38,6 +38,8 @@ const footerPage = fs.readFileSync(
 
     const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
     const userIndexPage = fs.readFileSync(__dirname + '/../public/userlogin/user_index.html', "utf8");
+    const IndexPage = fs.readFileSync(__dirname + '/../public/index.html', "utf8");
+
     const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
     const adminIndexPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_index.html', "utf8");
 
@@ -202,7 +204,7 @@ const footerPage = fs.readFileSync(
     else if (req.session.isOn === true) {
       return res.send ( userHeader + userIndexPage + footerPage);
     }else{
-      return res.send (headerPage + "index page here" + footerPage);
+      return res.send (headerPage + IndexPage + footerPage);
 
     }
 
