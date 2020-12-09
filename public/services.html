@@ -8,7 +8,6 @@
                 <th scope="col">Navn</th>
                 <th scope="col">Pris</th>
                 <th scope="col">Varighed</th>
-                <th scope="col">Handlinger</th>
             </tr>
         </thead>
         <tbody id="servicelist">
@@ -29,14 +28,7 @@
                 <td class="service_name">${val.name}</td>
                 <td class="service_price"> ${val.price}</td>
                 <td class="service_duration">${val.duration}</td>
-                <td>
-                    <button class="btn btn-danger delete-item" data-id="${val.id}">
-                        Slet
-                    </button>
-                    <button class="btn btn-primary edit-item" data-service='${val}'>
-                        Ret
-                    </button>
-                </td>
+               
             </tr>
             <tr style="display:none;">
                 <td>
@@ -66,53 +58,8 @@
             `;
         }
         
-        $(".delete-item").on("click", (event) => {
-            let id = $(event.target).data("id");
-            $.ajax({
-                type: "DELETE",
-                url: "/services",
-                data: `id=${id}`,
-                success: (msg) => {
-                    if (!msg.startsWith("Error")) {
-                        $(event.target).parentsUntil("tbody").last().remove();
-                    }
-                    console.log(msg);
-                },
-            });
-        });
-        $(".edit-item").on("click", (event) => {
-            $(event.target).parentsUntil("tbody").last().next("tr").slideToggle();
-            $(event.target).parentsUntil("tbody").last().next("tr").children("td").children("div").slideToggle();
-        });
-        $(".cancel-changes").on("click", (event) => {
-            $(event.target).parentsUntil("tbody").last().slideUp();
-            $(event.target).parentsUntil("tbody").last().children("td").children("div").slideUp();
-        });
-        $(".save-item").on("click", (event) => {
-
-            let id = $(event.target).data("id");
-            let row = $(event.target).parentsUntil("tbody").last();
-            let name = row.find(".service_name").val();
-            let price = row.find(".service_price").val();
-            let duration = row.find(".service_duration").val();
-            let data = {id: id, name: name, duration : duration, price: price,}
-            $.ajax({
-                type: "PUT",
-                url: "/services",
-                data: data,
-                success: (msg) => {
-                    if (!msg.startsWith("Error")) {
-                        //$(event.target).parentsUntil("tbody").last().remove();
-                    }
-                    console.log(msg);
-                    row.prev("tr").children(".service_name").text(name)
-                    row.prev("tr").children(".service_duration").text(duration)
-                    row.prev("tr").children(".service_price").text(price)
-                    $(event.target).parentsUntil("tbody").last().slideUp();
-                    $(event.target).parentsUntil("tbody").last().children("td").children("div").slideUp();
-                },
-            });
-        });
+       
+            
     }
     
     const services = async () => {
