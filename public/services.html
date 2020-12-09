@@ -1,75 +1,110 @@
-<h3>
-    Ydelser priser
-</h3>
+<h3>Ydelser priser</h3>
 
 <div>
     <table class="table">
         <thead>
-        <tr>
-        <th scope="col">#</th>
-        <th scope="col">Navn</th>
-        <th scope="col">Pris</th>
-        <th scope="col">Varighed</th>
-        <th scope="col">Handlinger</th>
-        </tr>
-    </thead>
-    <tbody id="servicelist">
-    </tbody>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Navn</th>
+                <th scope="col">Pris</th>
+                <th scope="col">Varighed</th>
+                <th scope="col">Handlinger</th>
+            </tr>
+        </thead>
+        <tbody id="servicelist">
+        </tbody>
     </table>
 </div>
 <script>
-
-function refresh_services(values){
-    for(let i in values){
-        let val = values[i];
-        
-        service_body = document.getElementById("servicelist");
-
-        service_body.innerHTML += `
+    function refresh_services(values) {
+        for (let i in values) {
+            let val = values[i];
+            
+            service_body = document.getElementById("servicelist");
+            
+            service_body.innerHTML += `
             <tr>
-            <td>${val.id}</td>
-            <td>${val.name}</td>
-            <td> ${val.price}</td>
-            <td>${val.duration}</td>
-            <td>
-                <button class="btn btn-danger delete_button" data-id="${val.id}">
-                    Slet
-                </button>
-                <a href="/edit_service/${val.id}" class="btn btn-primary">
-                    Ret
-                </a>
-            </td>
+                <td>${val.id}</td>
+                <td>${val.name}</td>
+                <td> ${val.price}</td>
+                <td>${val.duration}</td>
+                <td>
+                    <button class="btn btn-danger delete-item" data-id="${val.id}">
+                        Slet
+                    </button>
+                    <button class="btn btn-primary edit-item" data-service='${val}'>
+                        Ret
+                    </button>
+                </td>
             </tr>
-        `;
-    }
-
-    $(".delete_button").on("click", (event) =>{
-        let id = $(event.target).data("id");
-        $.ajax({
-            type: "DELETE",
-            url: "/services",
-            data: `id=${id}`,
-            success: (msg) => {
-                if(!msg.startsWith("Error")){
-                    $(event.target).parentsUntil("tbody").last().remove();
-                };
-                console.log(msg);
-            }
+            
+            <tr style="display:none;">
+                <td>
+                    <div style="display: none">
+                        <input class="form-control" disabled value="${val.id}" />
+                    </div>
+                </td>
+                <td>
+                    <div style="display: none">
+                        <input class="form-control service_name" value="${val.name}" />
+                    </div>
+                </td>
+                <td><div style="display: none">
+                        <input class="form-control service_price" value="${val.price}" />
+                    </div>
+                </td>
+                <td>
+                    <div style="display: none">
+                        <input class="form-control service_duration" value="${val.duration}" />
+                    </div>
+                </td>
+                </td>
+                <td>
+                    <div style="display:none">
+                    <button class="btn btn-success save-item">Gem</button>
+                    <button class="btn btn-warning cancel-changes">Luk</button>
+                    </div>
+                </td>
+            </tr>
+            `;
+        }
+        
+        $(".delete-item").on("click", (event) => {
+            let id = $(event.target).data("id");
+            $.ajax({
+                type: "DELETE",
+                url: "/services",
+                data: `id=${id}`,
+                success: (msg) => {
+                    if (!msg.startsWith("Error")) {
+                        $(event.target).parentsUntil("tbody").last().remove();
+                    }
+                    console.log(msg);
+                },
+            });
         });
-    });
-}
-
+        $(".edit-item").on("click", (event) => {
+            $(event.target).parentsUntil("tbody").last().next("tr").slideDown();
+            $(event.target).parentsUntil("tbody").last().next("tr").children("td").children("div").slideDown();
+        });
+        $(".cancel-changes").on("click", (event) => {
+            $(event.target).parentsUntil("tbody").last().slideToggle();
+            $(event.target).parentsUntil("tbody").last().children().slideToggle();
+        });
+    }
+    
     const services = async () => {
         let response = await fetch("/services");
         return await response.json();
     };
-
+    
     //Load services
-    services().then((values) => {
-        refresh_services(values)
-        
-    }, (reject) => {
+    services().then(
+    (values) => {
+        refresh_services(values);
+    },
+    (reject) => {
         console.log(`Services weren't received correctly, error: ${reject}`);
-    });
-
+    }
+    );
 </script>
