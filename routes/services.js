@@ -79,10 +79,10 @@ router.put("/services/", async (req, res) => {
 });
 router.delete("/services/", async (req, res) => {
   if(req.session.isOn !== true)
-    res.redirect("/services")
+    return res.redirect("/services");
   const id = escape(req.body.id);
   //Checks if it was deleted
-  if ((await Service.query().deleteById(id)) == 1)
+  if ((await Service.query().deleteById(id)) == id)
     return res.send("Service deleted succesfully.");
   return res.send("Error deleting service.");
 });
