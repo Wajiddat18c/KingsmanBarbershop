@@ -1,3 +1,172 @@
 <h1>
     Admin newsletter
 </h1>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">Handlinger</th>
+
+            </tr>
+        </thead>
+        <tbody id="Emaillist">
+
+    </table>
+</div>
+
+<!-- <script>
+    function refresh_services(values) {
+        for (let i in values) {
+            let val = values[i];
+            
+            service_body = document.getElementById("Emaillist");
+            
+            service_body.innerHTML += `
+            <tr>
+                <td>${val.id}</td>
+                <td class="newsletter_email">${val.email}</td>
+                <td>
+                    <button class="btn btn-danger delete-item" data-id="${val.id}">
+                        Slet
+                    </button>
+               
+            </tr>
+            <tr style="display:none;">
+                <td>
+                </td>
+                <td>
+                    <div style="display: none">
+                        <input class="form-control newsletter_email" value="${val.email}" />
+                    </div>
+                </td>
+
+                </td>
+                </td>
+                <td>
+                    <div style="display:none">
+                    <button class="btn btn-success save-item" data-id="${val.id}">Gem</button>
+                    <button class="btn btn-warning cancel-changes">Luk</button>
+                    </div>
+                </td>
+            </tr>
+            `;
+        }
+        async function load_services()
+    {
+        //Load services
+        await services().then(
+        (values) => {
+            render_services(values);
+        },
+        (reject) => {
+            console.log(`Services weren't received correctly, error: ${reject}`);
+        });
+    }
+    load_services().then(e => {
+    $(".delete-item").on("click", (event) => {
+            let id = $(event.target).data("id");
+            $.ajax({
+                type: "DELETE",
+                url: "/newsletters",
+                data: `id=${id}`,
+                success: (msg) => {
+                    if (!msg.startsWith("Error")) {
+                        $(event.target).parentsUntil("tbody").last().remove();
+                    }
+                    console.log(msg);
+                },
+            });
+        });
+       
+            
+    });
+    
+    const services = async () => {
+        let response = await fetch("/newsletters");
+        return await response.json();
+    };
+};
+    
+   
+    
+</script> -->
+<script>
+    function render_services(values) {
+        document.getElementById("Emaillist").innerHTML = "";
+        for (let i in values) {
+            let val = values[i];
+            append_service(val)
+            
+            
+
+        }
+        
+
+    }
+    let services = async () => {
+        let response = await fetch("/newsletters");
+        return await response.json();
+    };
+    function append_service(newsletter){
+        document.getElementById("Emaillist").innerHTML += `
+            <tr>
+                <td>${newsletter.id}</td>
+                <td class="newsletter_email">${newsletter.email}</td>
+                <td>
+                    <button class="btn btn-danger delete-item" data-id="${newsletter.id}">
+                        Slet
+                    </button>
+                </td>
+            </tr>
+            <tr style="display:none;">
+                <td>
+                </td>
+                <td>
+                    <div style="display: none">
+                        <input class="form-control newsletter_email" value="${newsletter.email}" />
+                    </div>
+                </td>
+                
+                </td>
+                </td>
+                <td>
+                    <div style="display:none">
+                    <button class="btn btn-success save-item" data-id="${newsletter.id}">Gem</button>
+                    <button class="btn btn-warning cancel-changes">Luk</button>
+                    </div>
+                </td>
+            </tr>
+            `;
+    }
+    async function load_services()
+    {
+        //Load services
+        await services().then(
+        (values) => {
+            render_services(values);
+        },
+        (reject) => {
+            console.log(`Services weren't received correctly, error: ${reject}`);
+        });
+    }
+    load_services().then(e => {
+    $(".delete-item").on("click", (event) => {
+            let id = $(event.target).data("id");
+            $.ajax({
+                type: "DELETE",
+                url: "/newsletters",
+                data: `id=${id}`,
+                success: (msg) => {
+                    if (!msg.startsWith("Error")) {
+                        $(event.target).parentsUntil("tbody").last().remove();
+                    }
+                    console.log(msg);
+                },
+            });
+        });
+       
+    })
+</script>
