@@ -1,0 +1,43 @@
+<h1>Admin products</h1>
+
+<div>
+    <h3>Opret produkt</h3>
+    <table class="table form form-inline">
+                <tr>
+                    <td>
+                    <input class="form-control" placeholder="Navn", id="navn" >
+                </td>
+                <td>
+                    <textarea class="form-control" placeholder="Beskrivelse", id="beskrivelse"></textarea>
+                </td>
+                <td>
+                    <input class="form-control" placeholder="Pris", id="pris">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2">
+                    <button class="btn btn-lg btn-success w-100 create-item">Opret</button>
+                </td>
+                <td></td>
+            </tr>
+</table>
+</div>
+<div>
+    <h3>Her er eksisterende services, ret, slet og læs dem efter behov.</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Navn</th>
+                <th scope="col">Beskrivelse</th>
+                <th scope="col">Pris</th>
+                <th scope="col">Varighed</th>
+                <th scope="col">Handlinger</th>
+            </tr>
+        </thead>
+        <tbody id="servicelist">
+
+        </tbody>
+    </table>
+</div>

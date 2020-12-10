@@ -1,18 +1,26 @@
-<h2>Contact Form</h2>
-<form method="POST" action="/contact">
-  
-  <div class="form-inline">
-    <input placeholder="Fulde navn" autofocus required type="text" id="name" class="form-control" name="name" />
-    
-  </div>
-  <div class="form-inline">
-    <input placeholder="Email" autofocus required type="email" id="email" class="form-control" name="email" />
-    
-  </div>
+<html>
+  <head>
+      <title>Kontack forumular</title>
+      <link rel="stylesheet" type="text/css" href="style_contact.css">
+  </head>
+  <body>
+    <form method="POST" action="/contact"></form>
+    <div class="kontakt forumular">
+      <h1>Kontakt formular</h1>
+      <h2>vi svare altid på på stillet spørgsmål!</h2>
 
-  <div class="form-inline">
-    
-    <textarea placeholder="Skriv dit spørgsmål her..." required type="text" id="question" class="form-control" name="question" style="height:200px"></textarea>
-  </div>
-  <button type="submit" class="btn btn-success">Submit</button>
-</form>
+    </div>
+
+    <div class="kontakt_formular">
+
+      <form id="kontakt_formular" method="POST" action="">
+        <input name="name" type="text" class="form-control" placeholder="Navn" required=""><br>
+
+        <input name="email" type="text" class="form-control" placeholder="email" required=""><br>
+
+        <textarea name="besked" class="form-control" placeholder="besked" rows="4" required></textarea><br>
+
+        <input type="submit" class="form-control" value="send besked">
+      </form>
+
+    </div>

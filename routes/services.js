@@ -55,10 +55,10 @@ router.post("/services/", async (req, res) => {
     console.log(error)
     return res.send("Error creating service.");
   }
-  
+
 });
 router.put("/services/", async (req, res) => {
-  if(req.session.isOn !== true)
+  if(req.session.adminTrue !== true)
     res.redirect("/services")
   const id = escape(req.body.id);
   const name = escape(req.body.name);
@@ -78,8 +78,8 @@ router.put("/services/", async (req, res) => {
     return res.send("Error deleting service.");
 });
 router.delete("/services/", async (req, res) => {
-  if(req.session.isOn !== true)
-    return res.redirect("/services");
+  if(req.session.adminTrue !== true)
+    res.redirect("/services")
   const id = escape(req.body.id);
   //Checks if it was deleted
   if ((await Service.query().deleteById(id)) == id)
@@ -88,7 +88,7 @@ router.delete("/services/", async (req, res) => {
 });
 router.patch("/services", async(req, res) => {
   //Create a patch to edit availability on services.
-  if(req.session.isOn !== true)
+  if(req.session.adminTrue !== true)
     res.redirect("/services")
   return res.send("fail");
 });
