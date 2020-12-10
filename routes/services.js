@@ -84,7 +84,7 @@ router.delete("/services/", async (req, res) => {
   //Checks if it was deleted
   if ((await Service.query().deleteById(id)) == id)
     return res.send("Service deleted succesfully.");
-  return res.send("Error deleting service.");
+    return res.send(adminHeader + adminService + footerPage);
 });
 router.patch("/services", async(req, res) => {
   //Create a patch to edit availability on services.

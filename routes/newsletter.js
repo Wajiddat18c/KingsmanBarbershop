@@ -36,13 +36,15 @@ const footerPage = fs.readFileSync(
     return res.send(await Email.query().select());
   });
   router.delete("/newsletters/", async (req, res) => {
-    if(req.session.isOn !== true)
+    if(req.session.adminTrue !== true)
       res.redirect("/newsletters")
     const id = escape(req.body.id);
     //Checks if it was deleted
-    if ((await Email.query().deleteById(id)) == 1)
+    if ((await Email.query().deleteById(id)) == id)
+   
       return res.send("email deleted succesfully.");
-    return res.send("Error deleting email.");
+    return res.send(AdminheaderPage + AdminNewsletterPage + footerPage);
+
   });
 
   router.get("/newsletter", (req, res) => {
