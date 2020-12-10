@@ -34,7 +34,6 @@ class Booking extends Model{
 };
 
 const knexfile = require('../knexfile');
-const { modelPaths } = require('./User');
 const knex = require('knex')({
     client : knexfile.development.client,
     connection : knexfile.development.connection

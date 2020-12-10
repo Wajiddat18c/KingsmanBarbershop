@@ -5,4 +5,8 @@ router.get("/products", async (req, res) => {
     return res.send(await Product.query().select());
 });
 
+router.get("/showproducts", async(req,res) =>{
+    return res.send(await Product.query().select())
+}
+);
 module.exports = router;
