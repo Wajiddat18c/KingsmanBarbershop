@@ -32,6 +32,19 @@ const footerPage = fs.readFileSync(
     "utf8"
   );
 
+  router.get("/newsletters", async (req, res) => {
+    return res.send(await Email.query().select());
+  });
+  router.delete("/newsletters/", async (req, res) => {
+    if(req.session.isOn !== true)
+      res.redirect("/newsletters")
+    const id = escape(req.body.id);
+    //Checks if it was deleted
+    if ((await Email.query().deleteById(id)) == 1)
+      return res.send("email deleted succesfully.");
+    return res.send("Error deleting email.");
+  });
+
   router.get("/newsletter", (req, res) => {
         //adminlogin
         if (req.session.adminTrue === true) {
