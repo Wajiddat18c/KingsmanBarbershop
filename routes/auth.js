@@ -6,6 +6,9 @@ const bcrypt = require("bcrypt");
 const saltRounds = 12;
 const nodemailer = require('nodemailer');
 
+const userInfo = [{"id": 1, "email": "email123", "name": "name123", "tlf": "tlf"}];
+const eMail = ""
+
 const fs = require("fs");
 
 
@@ -32,6 +35,12 @@ const footerPage = fs.readFileSync(
     __dirname + '/../public/loginsuccess.html',
     "utf8"
   );
+
+  const userAccount = fs.readFileSync(
+    __dirname + '/../public/userlogin/account.html',
+    "utf8"
+  );
+
 
   const loginPage = fs.readFileSync(
     __dirname + '/../public/login.html', "utf8");
@@ -67,9 +76,9 @@ const footerPage = fs.readFileSync(
       } else {
         try {
           User.query()
-            .select("name")
-            .where("name", name)
-            .orWhere("email", email)
+            .select("email")
+            .where("email", email)
+            // .orWhere("name", name)
             .orWhere("tlf", tlf)
             .limit(1)
             .then(async (foundUser) => {
@@ -113,9 +122,13 @@ const footerPage = fs.readFileSync(
                 
                   console.log("Message sent: " + info.response);
               });
-                req.session.isOn = true;
+                // TODO: Auto login on sign up?
+                // req.session.isOn = true;
+                // userInfo[0].email = email
+
                 req.session.email = email;
                 req.session.password = password;
+
                 return res.send(headerPage + signupsuccessPage + footerPage);
               }
             });
@@ -173,6 +186,8 @@ const footerPage = fs.readFileSync(
                   req.session.email = email;
                   req.session.password = password;
 
+                  userInfo[0].email = email
+
                   return res.redirect("/");
                 } else {
                   console.log(req.ip + " typed a wrong password");
@@ -194,6 +209,33 @@ const footerPage = fs.readFileSync(
         .send({ response: "Something went wrong with the database" });
     }
   });
+
+  router.get("/users", async (req, res) => {
+
+    let mail = userInfo[0].email;
+    const user = await User.query()
+    .select("*")
+    .where("email", mail).limit(1)
+
+    
+    userInfo[0].name = user[0].name
+    userInfo[0].tlf = user[0].tlf
+
+    return res.send(userInfo);
+  });
+
+  router.get("/userAccount", (req, res) => {
+    if(req.session.isOn == true){
+      return res.send( userHeader + userAccount + footerPage);
+
+    }else{
+      return res.send("LOGIN FIRST!");
+    }
+
+
+
+  });
+
 
   router.get("/", (req, res) => {
     if (req.session.adminTrue === true){
