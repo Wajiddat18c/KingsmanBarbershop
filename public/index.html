@@ -1,7 +1,43 @@
-<h1>
-    Index page.
-</h1>
+<style>
 
+
+#glass {
+    background: rgba(255,255,255, 0.2);
+    border-radius: 3em;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(40px);
+    border: solid 2px transparent;
+    background-clip: padding-box;
+    box-shadow: 10px 10px 10px  rgba(46, 54, 68, 0.03);
+}
+</style>
+  <div class="circle"></div>
+
+  <div class="container" id="glass">
+      <h2 class="seq">Kingsman Barbershop</h2>
+      <p class="seq">Solide klip til fornuftige priser.</p>
+  </div>
+
+
+<iframe src="https://snapwidget.com/embed/446245" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%;"></iframe>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+<script>
+const glass = document.getElementById('glass');
+
+const tl = gsap.timeline({defaults: {ease: "power2.inOut", duration: 1.5}})
+
+tl.from('iframe', { x: '-10%', opacity: 0})
+  .from('.container', {opacity: 0, delay: .5, duration: 1}, "-=1.5")
+  .from('.container', {x: '-20%', backdropFilter: 'blur(0px)'})
+  .from('.seq', { y: -30, opacity: 0, stagger: .2, duration: .5}, "-=.5")
+  .from('h1', { y: 20, clipPath: 'inset(0 0 100% 0)'}, "-=.8")
+
+</script>
 <script src="https://snapwidget.com/js/snapwidget.js"></script>
-<iframe src="https://snapwidget.com/embed/446245" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%; "></iframe>
-</div>
+
