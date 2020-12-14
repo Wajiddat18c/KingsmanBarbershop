@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cron = require("node-cron");
+const sslRedirect = require("heroku-ssl-redirect")
 
 const serverPort = process.env.PORT || 4000;
 
@@ -17,6 +18,8 @@ app.use(
 );
 
 const knex = Knex(knexfile.development);
+
+app.use(sslRedirect());
 
 Model.knex(knex);
 app.use(express.json());

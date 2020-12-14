@@ -10,7 +10,8 @@
     "migration:rollback": "knex migrate:rollback",
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
-    "cleandb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
+    "cleandb": "knex migrate:rollback && knex migrate:latest && knex seed:run",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "escape-html": "^1.0.3",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "heroku-ssl-redirect": "0.0.4",
     "knex": "^0.21.12",
     "mongodb": "^3.6.3",
     "mysql": "^2.18.1",
