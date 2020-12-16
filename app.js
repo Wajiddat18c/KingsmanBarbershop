@@ -51,6 +51,9 @@ app.use(resetRoute);
 const contactRoute = require("./routes/contact");
 app.use(contactRoute);
 
+const adminBookingRoute = require("./routes/booking_admin");
+app.use(adminBookingRoute);
+
 
 const booking_services_route = require("./routes/booking_services");
 app.use(booking_services_route);

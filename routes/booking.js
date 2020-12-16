@@ -30,6 +30,9 @@ const userBookFromPage = fs.readFileSync(__dirname + '/../public/userlogin/user_
 const adminBookPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_book.html', "utf8");
 const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 
+router.get("/bookings", async (req, res) => {
+    return res.send(await Booking.query().select());
+});
 
 router.get("/book", async (req, res) => {
     //adminlogin

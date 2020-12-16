@@ -1,3 +1,55 @@
 <h1>
     Admin book crud
 </h1>
+
+<div>
+    <p>
+        Her får du et overblik over de bookings der foretaget.
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Services</th>
+                <th>Customer</th>
+                <th>Dato & tid</th>
+            </tr>
+        </thead>
+        <tbody id="bookings">
+            <tr>
+                <td>1</td>
+                <td>Klip</td>
+                <td>Anders</td>
+                <td>2021</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    let bookings = async () => {
+        let response = await fetch("/bookings");
+        return await response.json();
+    };
+
+    bookings().then(
+    (values) => {
+        document.getElementById("bookings").innerHTML = "";
+        for (const row in values) {
+            document.getElementById("bookings").innerHTML += `
+            <tr>
+                <td>${values[row].id}</td>
+                <td>${values[row].service_id}</td>
+                <td>${values[row].customer_id}</td>
+                <td>${values[row].start_time}</td>
+            </tr>
+            `;
+
+        }
+        console.log(values);
+    },
+    (reject) => {
+        console.log(`Bookings weren't received correctly, error: ${reject}`);
+    });
+
+
+</script>
