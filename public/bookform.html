@@ -52,9 +52,9 @@
                 <!-- <label for="name">Name: </label> -->
                 <input name="name" class="form-control" id="name" placeholder="navn">
                 <!-- <label for="tlf">Telefon nummer:</label> -->
-                <input name="tlf" class="form-control" placeholder="telefon">
+                <input name="tlf" class="form-control" id="tlf" placeholder="telefon">
                 <!-- <label for="email">E-mail:</label> -->
-                <input name="email" class="form-control" placeholder="email" type="text">
+                <input name="email" class="form-control" id="email" placeholder="email" type="text">
                 <p>
                     Opret ny bruger: <input type="checkbox" id="opretbruger">
                 </p>
@@ -62,6 +62,23 @@
                 </div>
                 
             </div>
+            <script>
+                const account = async () => {
+                    let response = await fetch("/sessionaccount");
+                    return await response.json();
+                }
+
+                account().then((res) => {
+                    if(res !== "Not logged in"){
+                        let account = res[0];
+                        $("#name").val(account.name);
+                        $("#tlf").val(account.tlf);
+                        $("#email").val(account.email);
+                    }
+                }, (reject) => {
+                    console.log(reject);
+                })
+            </script>
         </div>
         <br>
         <div class="d-flex justify-content-center">

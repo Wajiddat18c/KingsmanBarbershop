@@ -41,11 +41,12 @@ router.get("/book", async (req, res) => {
 
     }
     //userlogin
+    /*
     else if (req.session.isOn === true) {
         return res.send(userHeader+userBookFromPage+footer);
 
     }
-
+*/
     return res.send(header+bookFormPage+footer);
 });
 router.get("/book/:error", async (req, res) => {
