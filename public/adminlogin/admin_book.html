@@ -13,15 +13,10 @@
                 <th>Services</th>
                 <th>Customer</th>
                 <th>Dato & tid</th>
+                <th>Handlinger</th>
             </tr>
         </thead>
         <tbody id="bookings">
-            <tr>
-                <td>1</td>
-                <td>Klip</td>
-                <td>Anders</td>
-                <td>2021</td>
-            </tr>
         </tbody>
     </table>
 </div>
@@ -32,15 +27,20 @@
     };
     bookings().then(
     (values) => {
-        document.getElementById("bookings").innerHTML = "";
         for (const row in values) {
+            let booking = values[row];
             document.getElementById("bookings").innerHTML += `
             <tr>
                 <td>
-                    <a href="/admin_booking/${values[row].id}">${values[row].id}</a></td>
-                <td>${values[row].services}</td>
-                <td>${name}</td>
-                <td>${values[row].start_time}</td>
+                    <a href="/admin_booking/${booking.id}">${booking.id}</a>
+                </td>
+                <td>${booking.services}</td>
+                <td>${booking.name}</td>
+                <td>${booking.start_time}</td>
+                <td>
+                    <a class="btn btn-primary" href="/admin_booking/${booking.id}">Rediger</a>
+                    <a class="btn btn-danger" href="/booking/delete/${booking.id}">Slet</a>
+                </td>
             </tr>
             `;
         }

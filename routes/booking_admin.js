@@ -4,6 +4,7 @@ const { raw } = require('../models/Booking');
 const Booking = require('../models/Booking');
 const escape = require('escape-html');
 const BookingServices = require('../models/BookingServices');
+const BookingProducts = require('../models/BookingProducts');
 
 const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
 const userBookFromPage = fs.readFileSync(__dirname + '/../public/userlogin/user_bookform.html', "utf8");
@@ -27,6 +28,15 @@ router.get("/admin/bookings", async (req, res) => {
     .innerJoin("customer", "customer.id", "booking.customer_id")
     .groupBy("booking.id"));
 });
+
+router.get("/booking/delete/:id", async (req, res) => {
+    let booking_id = req.params.id;
+    await BookingServices.query().delete().where("booking_id", "=", booking_id);
+    await BookingProducts.query().delete().where("booking_id", "=", booking_id);
+    await Booking.query().delete().where("id", "=", booking_id);
+    
+    return res.redirect("/admin_booking");
+})
 
 router.post("/booking_services/service", async (req, res) => {
     let booking_id = escape(req.body.bid);
