@@ -31,4 +31,9 @@ router.post("/product", async (req, res) => {
     return res.redirect("/admin_products");
 })
 
+router.get("/product/delete/:id", async (req, res) => {
+    await Product.query().delete().where("id", "=", req.params.id);
+    return res.redirect("/admin_products");
+})
+
 module.exports = router;
