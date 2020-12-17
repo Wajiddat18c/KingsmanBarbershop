@@ -2,9 +2,10 @@
 
   body
   {
-    background-color: #26272b;
+    background-color:white;
   }
   #glass {
+    text-align: center;
       margin-left: auto;
       margin-right: auto;
       font-family:  Arial, Helvetica, sans-serif;
@@ -20,11 +21,57 @@
     width: 100%;
     height: auto;
   }
+
+  .about{
+    text-align: center;
+    margin: 0;
+    box-sizing: border-box;
+    border: 10px solid #f1f1f1;
+  }
+
+  .newsletter{
+    border: 10px solid grey;
+    padding: 20px;
+  }
+
+.submit_button{
+  color: white;
+  border: none;
+  opacity: 0.8;
+}
+
+
   </style>
    
   
     <div class="titleContainer" id="glass">
         <h2 class="seq">Kingsman Barbershop</h2>
+    </div>
+
+    <div class="about">
+      <h2>
+        Hvem er vi?
+      </h2>
+
+      <p>
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      </p>
+    </div>
+
+    <div class="newsletter">
+
+      <input type="text" placeholder="Email address" name="mail" required>
+      <label>
+        <input type="checkbox" checked="checked" name="subscribe" required> Newsletter
+      </label>
+
+      <div class="submit_button">
+        <input type="submit" value="Subscribe">
+      </div>
+
     </div>
   
   </div class="imgContainer">

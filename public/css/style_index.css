@@ -1,0 +1,22 @@
+.titleContainer{
+    text-align: center;
+}
+
+.body{
+    margin: 0;
+}
+
+.fwh-slide{
+    height: 100vh;
+    background: red;
+    box-sizing: border-box;
+}
+
+.fwh-slide--bg--blue{
+    background: blue;
+    color: white;
+}
+
+.fwh-slide p{
+    margin: 0;
+}

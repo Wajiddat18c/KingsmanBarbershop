@@ -1,13 +1,21 @@
-<h2>Log in here</h2>
-<form method="POST" action="/login">
-  
-  <div class="form-inline">
-    <input placeholder="Email" autofocus required type="email" id="email" class="form-control" name="email" />
-    
+<link rel="stylesheet" href="login_style.css">
+
+<form method="POST" action="/login" style="border:1px solid #ccc">
+
+  <div class="container">
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Email" name="email" required id="email" class="form-control">
+
+    <label for="password"><b>Password</b></label>
+    <input type="password" placeholder="Password" name="password" required id="password" class="form-control">
+
+    <button type="submit">Login</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Husk mig
+    </label>
   </div>
-  <div class="form-inline">
-    
-    <input placeholder="Password" required type="password" id="password" class="form-control" name="password" />
+
+  <div class="container" style="background-color:#f1f1f1">
+    <span class="psw">glemt <a href="#">kodeord?</a></span>
   </div>
-  <button type="submit" class="btn btn-success">Submit</button>
 </form>
