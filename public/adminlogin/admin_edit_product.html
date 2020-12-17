@@ -1,0 +1,91 @@
+<h1>Admin products</h1>
+
+<div>
+    <h3>Rediger produkt</h3>
+    <form method="POST" action="/product/edit" id="edit_form">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Beskrivelse</th>
+                <th>Pris</th>
+                <th>Kategori</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+                <tr>
+                    <td>
+                    <input class="form-control" placeholder="Navn" id="name" name="name" >
+                </td>
+                <td>
+                    <textarea class="form-control" placeholder="Beskrivelse" id="description" name="description"></textarea>
+                </td>
+                <td>
+                    <input class="form-control" placeholder="Pris" id="price" type="number" name="price">
+                </td>
+                <td>
+                    <select id="categorylist" name="category" class="form-control">
+
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2">
+                    <button class="btn btn-lg btn-success w-100 create-item">Gem ændringer</button>
+                </td>
+                <td></td>
+            </tr>
+        </tbody>
+</table>
+</form>
+<script>
+    $(document).ready(() => {
+        let id = $("#id").val();
+        $("#edit_form").append($("#id"));
+
+        let product = async () =>
+        {
+            let response = await fetch(`/product/get/${id}`);
+            return await response.json();
+        }
+        
+        let categories = async () =>
+        {
+            let response = await fetch("/categories");
+            return await response.json();
+        }
+
+        product().then((values) => {
+            let product = values[0];
+            $("#name").val(product.name);
+            $("#description").val(product.description);
+            $("#price").val(product.price);
+            //$("#name").val(product.name);
+            
+            categories().then((values) => {
+                for (const key in values) {
+                    const category = values[key];
+                    if(category.id === product.cat_id){
+                        $("#categorylist").append(`
+                        <option selected value="${category.id}">${category.name}</option>
+                        `);
+                    }
+                    else{
+                        $("#categorylist").append(`
+                        <option value="${category.id}">${category.name}</option>
+                        `);
+                    }
+                    
+                }
+            }, (reject) => {
+                console.log("Couldn't receive categories");
+            })
+
+        }, (reject) => {
+            console.log("Error: couldn't receive product info.");
+        })
+    })
+</script>
+</div>
