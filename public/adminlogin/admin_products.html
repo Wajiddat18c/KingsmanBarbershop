@@ -59,45 +59,40 @@
     </table>
     <script>
 
-        let categories = async () =>
-        {
-            let response = await fetch("/categories");
+        let load_json = async(url) => {
+        //Helper async function that loads the data of given URL & parses the JSON.
+            let response = await fetch(url);
             return await response.json();
-        }
-        categories().then((values) => {
+        };
+
+        load_json("/categories").then((values) => {
+        //Loads categories & appends them as <option> tags for the dropdown in the create form.
             for (const key in values) {
-                const element = values[key];
+                const category = values[key];
                 $("#categorylist").append(`
-                <option value="${element.id}">${element.name}</option>
+                <option value="${category.id}">${category.name}</option>
                 `)    
             }
-        }, (reject) => {
-            console.log("Couldn't receive categories");
-        })
+        }, (reject) => console.log("Error: Couldn't load categories"));
 
-        $.ajax({
-            type: "GET",
-            url: "/products",
-            data: ``,
-            success: (values) => {
-                console.log(values);
-                for (let i in values) {
-                    let val = values[i];
-                    $("#servicelist").append(`
-                    <tr>
-                        <td scope="col">${val.id}</td>
-                        <td scope="col">${val.name}</td>
-                        <td scope="col">${val.description}</td>
-                        <td scope="col">${val.price}</td>
-                        <td scope="col">${val.category}</td>
-                        <td scope="col">
-                            <a class="btn btn-primary" href="/product/edit/${val.id}">Rediger</a>
-                            <a class="btn btn-danger" href="/product/delete/${val.id}">Slet</a>
-                        </td>
-                    </tr>
-                    `)
-                }
-            },
-        });
+        load_json("/products").then((values) => {
+        //Loads products & appends them to the table body
+            for (let i in values) {
+                let product = values[i];
+                $("#servicelist").append(`
+                <tr>
+                    <td scope="col">${product.id}</td>
+                    <td scope="col">${product.name}</td>
+                    <td scope="col">${product.description}</td>
+                    <td scope="col">${product.price}</td>
+                    <td scope="col">${product.category}</td>
+                    <td scope="col">
+                        <a class="btn btn-primary" href="/product/edit/${product.id}">Rediger</a>
+                        <a class="btn btn-danger" href="/product/delete/${product.id}">Slet</a>
+                    </td>
+                </tr>
+                `);
+            }
+        }, (reject) => console.log("Error: Couldn't load products"));
     </script>
 </div>

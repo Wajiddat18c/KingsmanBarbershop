@@ -42,32 +42,29 @@
 </form>
 <script>
     $(document).ready(() => {
+        //Gets id added from url, appends it to the form.
         let id = $("#id").val();
         $("#edit_form").append($("#id"));
 
-        let product = async () =>
-        {
-            let response = await fetch(`/product/get/${id}`);
+        let load_json = async(url) => {
+        //Helper async function that loads the data of given URL & parses the JSON.
+            let response = await fetch(url);
             return await response.json();
-        }
-        
-        let categories = async () =>
-        {
-            let response = await fetch("/categories");
-            return await response.json();
-        }
+        };
 
-        product().then((values) => {
+        load_json(`/product/get/${id}`).then((values) => {
+        //Gets a single product from db, fills the fields with the current data
             let product = values[0];
             $("#name").val(product.name);
             $("#description").val(product.description);
             $("#price").val(product.price);
-            //$("#name").val(product.name);
             
-            categories().then((values) => {
+            load_json("/categories").then((values) => {
+            //Loads categories into dropdown
                 for (const key in values) {
                     const category = values[key];
                     if(category.id === product.cat_id){
+                        //If the product category matches the current one, the "selected" attribute is added to the <option> tag to auto-select it.
                         $("#categorylist").append(`
                         <option selected value="${category.id}">${category.name}</option>
                         `);
@@ -79,13 +76,9 @@
                     }
                     
                 }
-            }, (reject) => {
-                console.log("Couldn't receive categories");
-            })
+            }, (reject) => console.log("Error: couldn't receive categories"));
 
-        }, (reject) => {
-            console.log("Error: couldn't receive product info.");
-        })
+        }, (reject) => console.log("Error: couldn't receive product info."));
     })
 </script>
 </div>

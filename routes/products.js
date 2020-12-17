@@ -21,6 +21,7 @@ router.get("/product/get/:id", async (req, res) =>{
 })
 
 router.get("/admin_products", async (req, res) => {
+    //Shows crud site for products
     return res.send(adminHeader + admin_products + footer);
 });
 
