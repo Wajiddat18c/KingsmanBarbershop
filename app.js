@@ -53,6 +53,8 @@ app.use(contactRoute);
 
 const adminBookingRoute = require("./routes/booking_admin");
 app.use(adminBookingRoute);
+const categoriesRoute = require("./routes/category");
+app.use(categoriesRoute);
 
 
 const booking_services_route = require("./routes/booking_services");

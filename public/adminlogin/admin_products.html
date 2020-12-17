@@ -2,16 +2,32 @@
 
 <div>
     <h3>Opret produkt</h3>
-    <table class="table form form-inline">
+    <form method="POST" action="/product"> 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Beskrivelse</th>
+                <th>Pris</th>
+                <th>Kategori</th>
+            </tr>
+        </thead>
+        <tbody>
+            
                 <tr>
                     <td>
-                    <input class="form-control" placeholder="Navn", id="navn" >
+                    <input class="form-control" placeholder="Navn" id="name" name="name" >
                 </td>
                 <td>
-                    <textarea class="form-control" placeholder="Beskrivelse", id="beskrivelse"></textarea>
+                    <textarea class="form-control" placeholder="Beskrivelse" id="description" name="description"></textarea>
                 </td>
                 <td>
-                    <input class="form-control" placeholder="Pris", id="pris">
+                    <input class="form-control" placeholder="Pris" id="price" type="number" name="price">
+                </td>
+                <td>
+                    <select id="categorylist" name="category" class="form-control">
+
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -21,7 +37,9 @@
                 </td>
                 <td></td>
             </tr>
+        </tbody>
 </table>
+</form>
 </div>
 <div>
     <h3>Her er eksisterende services, ret, slet og læs dem efter behov.</h3>
@@ -32,12 +50,54 @@
                 <th scope="col">Navn</th>
                 <th scope="col">Beskrivelse</th>
                 <th scope="col">Pris</th>
-                <th scope="col">Varighed</th>
-                <th scope="col">Handlinger</th>
+                <th scope="col">Kategori</th>
+                <th scope="col">Handling</th>
             </tr>
         </thead>
         <tbody id="servicelist">
-
         </tbody>
     </table>
+    <script>
+
+        let categories = async () =>
+        {
+            let response = await fetch("/categories");
+            return await response.json();
+        }
+        categories().then((values) => {
+            for (const key in values) {
+                const element = values[key];
+                $("#categorylist").append(`
+                <option value="${element.id}">${element.name}</option>
+                `)    
+            }
+        }, (reject) => {
+            console.log("Couldn't receive categories");
+        })
+
+        $.ajax({
+            type: "GET",
+            url: "/products",
+            data: ``,
+            success: (values) => {
+                console.log(values);
+                for (let i in values) {
+                    let val = values[i];
+                    $("#servicelist").append(`
+                    <tr>
+                        <td scope="col">${val.id}</td>
+                        <td scope="col">${val.name}</td>
+                        <td scope="col">${val.description}</td>
+                        <td scope="col">${val.price}</td>
+                        <td scope="col">${val.category}</td>
+                        <td scope="col">
+                            <a class="btn btn-primary" href="/admin/edit/product/${val.id}">Rediger</a>
+                            <a class="btn btn-danger" href="/admin/delete/product/${val.id}">Slet</a>
+                        </td>
+                    </tr>
+                    `)
+                }
+            },
+        });
+    </script>
 </div>
