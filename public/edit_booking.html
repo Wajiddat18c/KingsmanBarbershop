@@ -1,0 +1,69 @@
+<div class="col-md-6">
+        <div class="form-group">
+            <label for="start_time">Start:</label>
+            <input id="start_time" name="start_time" class="form-control">
+        </div>
+        <div class="form-group">
+            <form action="/booking_services/service" method="POST">
+            <select id="all_service_list" name="service">
+            </select>
+            <input id="bid" name="bid" type="hidden">
+            <button class="btn btn-primary" type="submit">Tilføj service
+            </button>
+            </form>
+        </div>
+        <div class="form-group">
+            <p>
+                Nuværende services
+            </p>
+            <div id="service_list"></div>
+        </div>
+        <div class="form-group">
+            <select>
+                <option>Jerry</option>
+            </select>
+        </div>
+    
+    <script>
+        booking_id = $("#booking_id").val();
+        $("#bid").val(booking_id);
+        $.ajax({
+            type: "GET",
+            url: "/services",
+            data: ``,
+            success: (values) => {
+                console.log(values);
+                for (let i in values) {
+                    let val = values[i];
+                    $("#all_service_list").append(`<option value="${values[i].id}">${values[i].name}</option>`)
+                }
+            },
+        });
+        $.ajax({
+            type: "GET",
+            url: `/services/booking/${booking_id}`,
+            data : "",
+            success: (values) => {
+                console.log(values);
+                for (let i in values) {
+                    let val = values[i];
+                    $("#service_list").append(`
+                    <div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-light">${val.name}</button>
+                    <a type="button" class="btn btn-warning remove_service" data-id="${val.id}" href="/booking_services/id/${booking_id}/service/${val.id}">Fjern</a>                  
+                    </div>
+                    </div>
+                    `)
+                }
+                $(".remove_service").on("click", (evt) => {
+                    service_id = $(evt.target).data("id");
+                    console.log(service_id);
+                    console.log(`/booking_services/id/${booking_id}/service/${service_id}`);
+                })
+            },
+        })
+
+        
+    </script>
+</div>
