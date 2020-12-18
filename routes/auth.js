@@ -236,6 +236,11 @@ const footerPage = fs.readFileSync(
 
   });
 
+  router.get("/userAccount/delete/:email", async (req, res) => {
+    await User.query().delete().where("email", "=", req.params.email);
+    req.session.isOn == false;
+    return res.redirect("/logout");
+});
 
   router.get("/", (req, res) => {
     if (req.session.adminTrue === true){

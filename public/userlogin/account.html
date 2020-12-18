@@ -8,6 +8,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Navn</th>
                 <th scope="col">Tlf-nummer</th>
+                <th scope="col">Slet konto</th>
             </tr>
         </thead>
         <tbody id="servicelist">
@@ -28,6 +29,9 @@
                 <td class="service_name">${val.email}</td>
                 <td class="service_price"> ${val.name}</td>
                 <td class="service_duration">${val.tlf}</td>
+                <td scope="col">
+                        <a class="btn btn-danger" href="/userAccount/delete/${val.email}">Slet</a>
+                    </td>
                
             </tr>
             <tr style="display:none;">
@@ -76,4 +80,4 @@
         console.log(`Services weren't received correctly, error: ${reject}`);
     }
     );
-</script>
+</script> 
