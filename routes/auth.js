@@ -246,10 +246,12 @@ const footerPage = fs.readFileSync(
     else if (req.session.isOn === true) {
       return res.send ( userHeader + userIndexPage + footerPage);
     }else{
+      
       return res.send (headerPage + IndexPage + footerPage);
-
     }
 
     });
+
+    
 
 module.exports = router;

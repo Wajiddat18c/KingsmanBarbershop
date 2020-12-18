@@ -60,19 +60,21 @@
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
       </p>
     </div>
+    <form method="POST" action="/newsletter">
 
     <div class="newsletter">
 
-      <input type="text" placeholder="Email address" name="mail" required>
+      <input placeholder="Email address" autofocus required type="email" id="email" class="form-control" name="email" />
       <label>
         <input type="checkbox" checked="checked" name="subscribe" required> Newsletter
-      </label>
+      </label> 
 
       <div class="submit_button">
         <input type="submit" value="Subscribe">
       </div>
 
     </div>
+  </form>
   
   </div class="imgContainer">
   <iframe src="https://snapwidget.com/embed/446245" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%;"></iframe>
