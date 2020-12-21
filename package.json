@@ -36,6 +36,7 @@
     "nodemailer": "^6.4.16",
     "nodemon": "^2.0.6",
     "objection": "^2.2.3",
+    "request": "^2.88.2",
     "twilio": "3.49.3",
     "uuid": "^8.3.1"
   }

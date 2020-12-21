@@ -1,0 +1,83 @@
+<h3>Brugerinfo</h3>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                
+                <th scope="col">Email</th>
+                <th scope="col">Navn</th>
+                <th scope="col">Tlf-nummer</th>
+                <th scope="col">Slet konto</th>
+            </tr>
+        </thead>
+        <tbody id="servicelist">
+
+        </tbody>
+    </table>
+</div>
+<script>
+    function refresh_services(values) {
+        for (let i in values) {
+            let val = values[i];
+            
+            service_body = document.getElementById("servicelist");
+            
+            service_body.innerHTML += `
+            <tr>
+  
+                <td class="service_name">${val.start_time}</td>
+                <td class="service_price"> ${val.name}</td>
+                <td class="service_duration">${val.tlf}</td>
+                <td scope="col">
+                        <a class="btn btn-danger" href="/userAccount/delete/${val.email}">Slet</a>
+                    </td>
+               
+            </tr>
+            <tr style="display:none;">
+                <td>
+                </td>
+                <td>
+                    <div style="display: none">
+                        <input class="form-control service_name" value="${val.start_time}" />
+                    </div>
+                </td>
+                <td><div style="display: none">
+                        <input class="form-control service_price" value="${val.name}" />
+                    </div>
+                </td>
+                <td>
+                    <div style="display: none">
+                        <input class="form-control service_duration" value="${val.tlf}" />
+                    </div>
+                </td>
+                </td>
+                <td>
+                    <div style="display:none">
+                    <button class="btn btn-success save-item" data-id="${val.id}">Gem</button>
+                    <button class="btn btn-warning cancel-changes">Luk</button>
+                    </div>
+                </td>
+            </tr>
+            `;
+        }
+        
+       
+            
+    }
+    
+    const services = async () => {
+        let response = await fetch("/showhistory");
+        return await response.json();
+    };
+    
+    //Load services
+    services().then(
+    (values) => {
+        refresh_services(values);
+    },
+    (reject) => {
+        console.log(`Services weren't received correctly, error: ${reject}`);
+    }
+    );
+</script> 

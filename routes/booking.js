@@ -226,7 +226,7 @@ router.post("/book", async (req, res) => {
 
 
 
-        if(password == undefined){
+        if(password !== undefined){
             console.log("pw", password);
             console.log(password.length);
             if (password.length < 8) {
@@ -282,7 +282,6 @@ router.post("/book", async (req, res) => {
                         
                           console.log("Message sent: " + info.response);
                       });
-                        req.session.isOn = true;
                         req.session.email = email;
                         req.session.password = password;
                         return res.redirect("/");

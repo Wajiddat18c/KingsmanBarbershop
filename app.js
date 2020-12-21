@@ -41,7 +41,8 @@ const productRoute = require("./routes/products");
 app.use(productRoute);
 const newsletterRoute = require("./routes/newsletter");
 app.use(newsletterRoute);
-
+const bookingHistoryRoute = require("./routes/booking_history");
+app.use(bookingHistoryRoute);
 const authRoute = require("./routes/auth");
 app.use(authRoute);
 
