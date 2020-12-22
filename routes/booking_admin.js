@@ -28,6 +28,25 @@ router.get("/admin/bookings", async (req, res) => {
     .innerJoin("customer", "customer.id", "booking.customer_id")
     .groupBy("booking.id"));
 });
+router.get("/admin/booking/get/:id", async (req, res) => {
+    res.send(await Booking.query().select("customer.name", "start_time")
+    .innerJoin("customer", "customer.id", "booking.customer_id")
+    .where("booking.id", req.params.id));
+});
+router.post("/admin/booking/edit", async (req, res) => {
+    const {customer_id, daydate, timeslot, bid} = req.body;
+    const time_stamp = daydate+" "+timeslot
+    console.log(customer_id);
+    console.log(daydate);
+    console.log(timeslot);
+    console.log(bid);
+    await Booking.query().patch({
+        customer_id: customer_id,
+        start_time: time_stamp,
+    }).findById(bid);
+    return res.redirect("/admin_booking");
+})
+
 
 router.get("/booking/delete/:id", async (req, res) => {
     let booking_id = req.params.id;
