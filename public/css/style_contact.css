@@ -3,7 +3,7 @@ body{
     padding: 0;
     text-align: center;
     /*background: linear-gradient(rgba(0 ,0, 150, 05),rgba(77, 76, 76, 0.5)),url("kingsman_barbershop_contact.jpg");*/
-    background: url("kingsman_barbershop_contact.jpg");
+    /*background: url("kingsman_barbershop_contact.jpg");*/
     background-size: cover;
     background-position: center;
     font-family: sans-serif;
@@ -34,8 +34,8 @@ form{
     background: transparent;
     border: none;
     outline: none;
-    border-bottom: 1px solid white;
-    color: #fff;
+    border-bottom: 1px solid black;
+    color:black;
     font-size: 18px;
     margin-bottom: 16px;
 }

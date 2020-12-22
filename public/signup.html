@@ -1,22 +1,37 @@
-<h2>Sign up here</h2>
 <form method="POST" action="/signup">
-  
-  <div class="form-inline">
-    <input placeholder="Name" required type="text" id="name" class="form-control" name="name" />
-    
-  </div>
-  <div class="form-inline">
-    
-    <input placeholder="Email" required type="email" id="email" class="form-control" name="email" />
-  </div>
-  <div>
-    <div class="form-inline">
-    <input placeholder="Mobil nmmmer" required type="text" id="tlf" class="form-control" name="tlf" />
+  <link rel="stylesheet" href="signup_style.css">
 
+  
+  <div class="container">
+    <h1>Opret brugerkonto</h1>
+    <p>Udfyld denne form for at oprette en brugerkonto</p>
+    <hr>
+
+    <label for="Navn"><b>Navn</b></label>
+    <input type="text" placeholder="navn" name="navn" required>
+
+    <label for="telefon nummer"><b>Telefon nummer</b></label>
+    <input type="tel" placeholder="Telefon nummer" name="Telefon nummer" required>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Email" name="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Password" name="psw" required>
+
+    <label for="psw-repeat"><b>Gentag Password</b></label>
+    <input type="password" placeholder="Gentag Password" name="psw-repeat" required>
+
+    <label>
+      <input type="checkbox" checked="checked" name="Tilmeld" style="margin-bottom:15px"> Tilmeld mig nyhedsbrevet
+    </label>
+
+    <p>Ved at oprette en konto accepterer du vores <a href="#" style="color:dodgerblue">privatpolitik</a>.</p>
+
+    <div class="clearfix">
+      <button type="button" class="cancelbtn">Cancel</button> <!--Tilføj href til startsiden-->
+      <button type="submit" class="signupbtn">Sign Up</button>
+    </div>
   </div>
-  <div class="form-inline">
-    
-    <input placeholder="Password" required type="password" id="password" class="form-control" name="password" />
-  </div>
-  <button type="submit" class="btn btn-success">Submit</button>
+
 </form>
