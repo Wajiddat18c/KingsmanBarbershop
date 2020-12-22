@@ -21,14 +21,6 @@ class Booking extends Model{
                 from: "booking.service_id",
                 to: "services.id"
             }
-        },
-        customer: {
-            relation: Model.HasOneRelation,
-            modelClass: Customer,
-            join: {
-                from: "booking.customer_id",
-                to: "customer.id"
-            }
         }
     }
 };

@@ -45,7 +45,7 @@ router.get("/services", async (req, res) => {
 
 router.get("/services/booking/:id", async (req, res) => {
   let id = escape(req.params.id);
-  console.log(id);
+  //console.log(id);
   return res.send(await Service.query().select("services.name", "services.id")
   .innerJoin("booking_services", "service_id","=", "services.id")
   .where("booking_services.booking_id", "=", id))
