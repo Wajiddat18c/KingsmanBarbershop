@@ -5,6 +5,8 @@ const { raw } = require('objection');
 
 const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 const footer = fs.readFileSync(__dirname + '/../public/footer.html', "utf8");
+const products = fs.readFileSync(__dirname + '/../public/products.html', "utf8");
+const header = fs.readFileSync(__dirname + '/../public/header.html', "utf8");
 const admin_products = fs.readFileSync(__dirname+ '/../public/adminlogin/admin_products.html', "utf8");
 const admin_edit_product = fs.readFileSync(__dirname+ '/../public/adminlogin/admin_edit_product.html', "utf8");
 
@@ -16,6 +18,11 @@ router.get("/products", async (req, res) => {
 router.get("/showproducts", async(req,res) =>{
     return res.send(await Product.query().select())
 });
+
+router.get("/showProduct", (req,res) => {
+    return res.send(header + products + footer)
+});
+
 router.get("/product/get/:id", async (req, res) =>{
     return res.send(await Product.query().select().where("id", "=", req.params.id));
 })
