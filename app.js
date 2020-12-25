@@ -25,7 +25,7 @@ Model.knex(knex);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public/css/'))
-app.use(express.static('public/images/'))
+app.use(express.static('public/Images/'))
 
 
 //auto add all from from?

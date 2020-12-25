@@ -1,17 +1,59 @@
+<div class="row">
 <div class="col-md-6">
+    <form action="/admin/booking/edit" method="POST">
         <div class="form-group">
-            <label for="start_time">Start:</label>
-            <input id="start_time" name="start_time" class="form-control">
+            <label for="daydate">Start:</label>
+            <div id="datetime_wrapper">
+                
+                <div class="form-inline">
+                    <input id="daydate" placeholder="Vælg en dag" class="form-control" name="daydate" type="text">
+                </div>
+                <br>
+                <p>Tidspunkt:</p>
+                <div id="times">(Vælg en dag først)</div>
+                <br>
+            </div>
         </div>
         <div class="form-group">
-            <form action="/booking_services/service" method="POST">
-            <select id="all_service_list" name="service">
-            </select>
-            <input id="bid" name="bid" type="hidden">
-            <button class="btn btn-primary" type="submit">Tilføj service
-            </button>
-            </form>
+            <label for="customer_id">Kunde:</label>
+            <select id="all_customers_list" name="customer_id"></select>
         </div>
+        <input class="bid" name="bid" type="hidden">
+        <button type="submit" class="btn btn-success">Gem ændringer</button>
+    </form>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        <form action="/booking_services/service" method="POST">
+            <p>Service</p>
+        <select id="all_service_list" name="service">
+        </select>
+        <input class="bid" name="bid" type="hidden">
+        <button class="btn btn-primary" type="submit">Tilføj service
+        </button>
+        </form>
+    </div>
+    <div class="form-group">
+        <form action="/booking_products/product" method="POST">
+        <p>
+            Produkt
+        </p>
+        <select id="all_product_list" name="product">
+        </select>
+        
+        Antal: 
+        <select name="count" class="count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <input class="bid" name="bid" type="hidden">
+        <button class="btn btn-primary" type="submit">Tilføj product
+        </button>
+        </form>
+    </div>
         <div class="form-group">
             <p>
                 Nuværende services
@@ -19,50 +61,117 @@
             <div id="service_list"></div>
         </div>
         <div class="form-group">
-            <select>
-                <option>Jerry</option>
-            </select>
+            <p>
+                Nuværende produkter
+            </p>
+            <div id="product_list"></div>
         </div>
-    
+</div>
+</div>
     <script>
         booking_id = $("#booking_id").val();
-        $("#bid").val(booking_id);
-        $.ajax({
-            type: "GET",
-            url: "/services",
-            data: ``,
-            success: (values) => {
-                console.log(values);
-                for (let i in values) {
-                    let val = values[i];
-                    $("#all_service_list").append(`<option value="${values[i].id}">${values[i].name}</option>`)
+        $(".bid").val(booking_id);
+
+        let load_json = async(url) => {
+        //Helper async function that loads the data of given URL & parses the JSON.
+            let response = await fetch(url);
+            return await response.json();
+        };
+
+        load_json(`/admin/booking/get/${booking_id}`).then((result) => {
+            //Todo add all customers to customer select
+            console.log(result);
+            let booking = result[0];
+            
+            $("#daydate").val(new Date(Date.parse( booking.start_time)));
+
+            let calendar = $("#daydate").datepicker({dateFormat: "yy-mm-dd"});
+
+            $("#daydate").on("change", async (e) => {
+                console.log(e.target.value);
+                let response = await fetch("/booking_services/" + encodeURIComponent(e.target.value));
+                let reserved = await response.json();
+                console.log(reserved)
+                
+                //Add end date
+                for (const book in reserved) {
+                    let end_time = new Date(new Date(reserved[book].start_time).getTime()+reserved[book].duration*60000);
+                    reserved[book].start_time = new Date(reserved[book].start_time);
+                    reserved[book].end_time = end_time;
+                    /*
+                    //Testing if enddate works
+                    console.log("start: "+start_time)
+                    console.log("duration: "+reserved[book].duration);
+                    console.log("slut: "+ end_time);
+                    */
                 }
-            },
-        });
-        $.ajax({
-            type: "GET",
-            url: `/services/booking/${booking_id}`,
-            data : "",
-            success: (values) => {
-                console.log(values);
-                for (let i in values) {
-                    let val = values[i];
-                    $("#service_list").append(`
-                    <div>
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-light">${val.name}</button>
-                    <a type="button" class="btn btn-warning remove_service" data-id="${val.id}" href="/booking_services/id/${booking_id}/service/${val.id}">Fjern</a>                  
-                    </div>
-                    </div>
-                    `)
-                }
-                $(".remove_service").on("click", (evt) => {
-                    service_id = $(evt.target).data("id");
-                    console.log(service_id);
-                    console.log(`/booking_services/id/${booking_id}/service/${service_id}`);
-                })
-            },
-        })
+                let closed = new Date(Date.parse(e.target.value+"T16:00"))
+                document.getElementById("times").innerHTML = "";
+                for(let dt = new Date(Date.parse(e.target.value+"T10:00")); dt < closed; dt = new Date(dt.getTime()+15*60000) ){
+                    let available = true;
+                    for (const book in reserved) {
+
+                        if(dt >= reserved[book].start_time && dt <= reserved[book].end_time)
+                        {
+                            reserved[book].end_time
+                            available = false;
+                            break;
+                        }    
+                        
+                    }
+                    if(available)
+                    {
+                        timeStr = `${dt.getHours()}:${dt.getMinutes().toString().length > 1 ? dt.getMinutes() : dt.getMinutes()+"0"}`;
+                        document.getElementById("times").innerHTML += `
+                        <label class="btn btn-outline-primary">
+                            <input type="radio" id="timeslot" name="timeslot" value="${timeStr}"> 
+                            ${timeStr}
+                        </label>
+                        `;
+                    }
+                        
+                };
+            });
+
+            $("#all_customers_list").append(`
+            <option value="1">${booking.name}</option>
+            `);
+        }, (reject) => console.log(reject));
+
+        load_json("/products").then((result) => {
+            for (let i in result) {
+                let product = result[i];
+                $("#all_product_list").append(`<option value="${product.id}">${product.name}</option>`);
+            };
+        }, reject => console.log("Couldn't fetched all products"));
+
+        load_json("/services").then(result => {
+            for (let i in result) {
+                let service = result[i];
+                $("#all_service_list").append(`<option value="${service.id}">${service.name}</option>`)
+            }
+        }, reject => console.log("Couldn't fetch services"));
+
+        load_json(`/services/booking/${booking_id}`).then(result => {
+            for (let i in result) {
+                let booking_service = result[i];
+                $("#service_list").append(`
+                <div>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-light">${booking_service.name}</button>
+                <a type="button" class="btn btn-warning remove_service" data-id="${booking_service.id}" href="/booking_services/id/${booking_id}/service/${booking_service.id}">Fjern</a>                  
+                </div>
+                </div>
+                `)
+            }
+            
+            $(".remove_service").on("click", (evt) => {
+                service_id = $(evt.target).data("id");
+                console.log(service_id);
+                console.log(`/booking_services/id/${booking_id}/service/${service_id}`);
+            })
+
+        }, reject => console.log("Couldn't fetch booking_services"));
 
         
     </script>
