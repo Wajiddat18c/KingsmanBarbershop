@@ -40,8 +40,11 @@ const footerPage = fs.readFileSync(
 
     for (let i = 0; i < cus.length; i++) {
         //console.log(cus[i].email)
-        info.push(await Booking.query().withGraphFetched('customer').where("customer_id", cus[i].id))
+        //info.push(await Booking.query().withGraphFetched('customer').where("customer_id", cus[i].id))
+        info.push(await Booking.query().where("customer_id", cus[i].id))
       }
+
+
     return res.send(info)
     });
 
