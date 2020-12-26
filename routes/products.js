@@ -27,6 +27,12 @@ router.get("/product/get/:id", async (req, res) =>{
     return res.send(await Product.query().select().where("id", "=", req.params.id));
 })
 
+router.get("/products/booking/:id", async(req, res) => {
+    return res.send(await Product.query().select("products.id", "products.name", "booking_products.amount")
+    .innerJoin("booking_products", "product_id","=", "products.id")
+    .where("booking_products.booking_id", "=", req.params.id))
+})
+
 router.get("/admin_products", async (req, res) => {
     //Shows crud site for products
     return res.send(adminHeader + admin_products + footer);
