@@ -176,6 +176,7 @@ const footerPage = fs.readFileSync(
                 //admin pw: admin123
                 if (result === true && email == "kingsmanBS@gmail.com" ){
                   req.session.adminTrue = true;
+                  req.session.isOn = true;
                   req.session.email = email;
                   req.session.password = password;
                   return res.redirect("/");

@@ -29,7 +29,7 @@ router.get("/admin/bookings", async (req, res) => {
     .groupBy("booking.id"));
 });
 router.get("/admin/booking/get/:id", async (req, res) => {
-    res.send(await Booking.query().select("customer.name", "start_time")
+    res.send(await Booking.query().select("customer.name", "start_time", "customer_id")
     .innerJoin("customer", "customer.id", "booking.customer_id")
     .where("booking.id", req.params.id));
 });

@@ -133,9 +133,24 @@
                 };
             });
 
-            $("#all_customers_list").append(`
-            <option value="1">${booking.name}</option>
-            `);
+            load_json("/customers").then((val) => {
+                for (const i in val) {
+                    const customer = val[i];
+                    if(customer.id == booking.customer_id) {
+                        $("#all_customers_list").append(`
+                            <option selected value="${booking.customer_id}">${customer.name}, id: ${customer.id}</option>
+                        `);
+                    }
+                    else{
+                        $("#all_customers_list").append(`
+                            <option value="${customer.id}">${customer.name}, id: ${customer.id}</option>
+                        `);
+                    }
+                }
+                
+            }, reject => console.log("loading customer failed: "+reject))
+
+            
         }, (reject) => console.log(reject));
 
         load_json("/products").then((result) => {
