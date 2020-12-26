@@ -42,7 +42,7 @@
         </select>
         
         Antal: 
-        <select name="count" class="count">
+        <select name="amount" class="amount">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -187,6 +187,30 @@
             })
 
         }, reject => console.log("Couldn't fetch booking_services"));
+
+        load_json(`/products/booking/${booking_id}`).then(result => {
+            for (let i in result) {
+                let booking_product = result[i];
+                console.log(i);
+                $("#product_list").append(`
+                <div>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-light">${booking_product.name}, styk: ${booking_product.amount}</button>
+                <a type="button" class="btn btn-warning remove_product" data-id="${booking_product.id}" href="/booking_products/id/${booking_id}/product/${booking_product.id}">Fjern</a>                  
+                </div>
+                </div>
+                `)
+            }
+            
+            $(".remove_product").on("click", (evt) => {
+                service_id = $(evt.target).data("id");
+                console.log(service_id);
+                console.log(`/booking_products/id/${booking_id}/product/${service_id}`);
+            })
+
+        }, reject => console.log("Couldn't fetch booking_products"));
+
+        
 
         
     </script>

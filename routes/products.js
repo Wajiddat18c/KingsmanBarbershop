@@ -2,6 +2,7 @@ const Product = require('../models/Product');
 const router = require('express').Router();
 const fs = require('fs');
 const { raw } = require('objection');
+const BookingProducts = require('../models/BookingProducts');
 
 const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 const footer = fs.readFileSync(__dirname + '/../public/footer.html', "utf8");
@@ -68,6 +69,15 @@ router.post("/product/edit", async (req, res) => {
         cat_id: category
     }).findById(id)
     return res.redirect("/admin_products"); 
+});
+
+router.get("/booking_products/id/:booking_id/product/:id", async (req, res) => {
+    let booking_id = escape(req.params.booking_id);
+    let product_id = escape(req.params.id);
+    await BookingProducts.query().del()
+    .where("product_id", "=", product_id)
+    .where("booking_id", "=", booking_id);
+   res.redirect("/admin_booking/"+booking_id);
 });
 
 module.exports = router;

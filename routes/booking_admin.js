@@ -67,5 +67,17 @@ router.post("/booking_services/service", async (req, res) => {
     });
     res.redirect("/admin_booking/"+booking_id);
 });
+router.post("/booking_products/product", async (req, res) => {
+    let booking_id = escape(req.body.bid);
+    let product_id = escape(req.body.product);
+    let amount = escape(req.body.amount);
+    console.log(booking_id + ":" + product_id);
+    await BookingProducts.query().insert({
+        booking_id: raw(booking_id),
+        product_id: raw(product_id),
+        amount: amount
+    });
+    res.redirect("/admin_booking/"+booking_id);
+});
 
 module.exports = router;
