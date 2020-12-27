@@ -1,22 +1,42 @@
-.titleContainer{
-    text-align: center;
+.about{
+  text-align: center;
+  margin: 0;
+  box-sizing: border-box;
+  border: 10px solid #f1f1f1;
+  margin-bottom: 100px;
 }
 
-.body{
-    margin: 0;
+.newsletter{
+    margin-top: 100px;
+  text-align: center;
+  border: 10px solid grey;
+  padding: 20px;
 }
 
-.fwh-slide{
-    height: 100vh;
-    background: red;
-    box-sizing: border-box;
-}
-
-.fwh-slide--bg--blue{
-    background: blue;
+.button{
+    background-color: #4CAF50; /* Green */
+    border: none;
     color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
-.fwh-slide p{
-    margin: 0;
+.submit_button{
+color: white;
+border: none;
+opacity: 0.8;
+}
+
+.instagram{
+    margin-top: 100px;
+    text-align: center;
+    border: 10px solid grey;
+    padding: 20px;
+
 }
