@@ -13,14 +13,18 @@
 
     <div class="kontakt_formular">
 
-      <form id="kontakt_formular" method="POST" action="">
-        <input name="name" type="text" class="form-control" placeholder="Navn" required=""><br>
-
-        <input name="email" type="text" class="form-control" placeholder="email" required=""><br>
-
-        <textarea name="besked" class="form-control" placeholder="besked" rows="4" required></textarea><br>
-
-        <input type="submit" class="form-control" value="send besked">
+      <form action="/action_page.php">
+        <label for="fname">Navn</label>
+        <input type="text" id="fname" name="firstname" placeholder="Navn">
+    
+        <label for="lname">Email</label>
+        <input type="text" id="lname" name="lastname" placeholder="Email">
+    
+    
+        <label for="subject">Emne</label>
+        <textarea id="subject" name="Emne" placeholder="Dit spørgsmål..." style="height:200px"></textarea>
+    
+        <input type="submit" value="Send">
       </form>
 
     </div>
