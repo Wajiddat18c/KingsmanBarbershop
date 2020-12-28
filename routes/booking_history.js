@@ -32,14 +32,15 @@ const footerPage = fs.readFileSync(
 
   let email = req.session.email
 
-  res.send(await Booking.query().select("booking.id",raw('GROUP_CONCAT(" ", services.name)').as("services"),raw('GROUP_CONCAT(" ", products.name)').as("products"), "customer.name", "start_time")
-  .leftJoin("booking_services", "booking.id", "booking_services.booking_id")
-  .leftJoin("services", "booking_services.service_id", "services.id")
-  .innerJoin("customer", "customer.id", "booking.customer_id")
-  .leftJoin("booking_products", "booking.id", "booking_products.booking_id")
-  .leftJoin("products", "booking_products.product_id", "products.id")
-  .groupBy("booking.id")
-  .where("customer.email", email));
+
+    res.send(await Booking.query().select("booking.id",raw('group_concat(DISTINCT(services.name) separator " ")').as("services"),raw('group_concat(distinct(products.name), " , antal:", booking_products.amount)').as("products"), sum("products.price").as('produktpris'), sum("services.price").as("ydelsespris"), "customer.name", "start_time")
+    .leftJoin("booking_services", "booking.id", "booking_services.booking_id")
+    .innerJoin("services", "booking_services.service_id","services.id")
+    .leftJoin("booking_products", "booking.id", "booking_products.booking_id")
+    .leftJoin("products", "products.id", "booking_products.product_id")
+    .innerJoin("customer", "booking.customer_id", "customer.id")
+    .groupBy("booking.id")
+    .where("customer.email", email));
 
     });
 
