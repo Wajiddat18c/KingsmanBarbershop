@@ -33,7 +33,11 @@ const footerPage = fs.readFileSync(
   let email = req.session.email
 
 
-    res.send(await Booking.query().select("booking.id",raw('group_concat(DISTINCT(services.name) separator " ")').as("services"),raw('group_concat(distinct(products.name), " , antal:", booking_products.amount)').as("products"), sum("products.price").as('produktpris'), sum("services.price").as("ydelsespris"), "customer.name", "start_time")
+    res.send(await Booking.query().select("booking.id",raw('group_concat(DISTINCT(services.name) separator " ")').as("services"),
+    raw('group_concat(distinct(products.name), " , antal:", booking_products.amount)').as("products"),
+    raw("SUM(products.price)").as('produktpris'),
+    raw('SUM(services.price)').as("ydelsespris"),
+    "customer.name", "start_time")
     .leftJoin("booking_services", "booking.id", "booking_services.booking_id")
     .innerJoin("services", "booking_services.service_id","services.id")
     .leftJoin("booking_products", "booking.id", "booking_products.booking_id")
