@@ -22,14 +22,14 @@
             let val = values[i];
             
             service_body = document.getElementById("servicelist");
-            
+            let start_time = new Date(Date.parse(val.start_time));
             service_body.innerHTML += `
             <tr>
   
                 <td class="service_name">${val.services}</td>
                 <td class="service_price"> ${val.products}</td>
                 <td class="service_duration">${val.name}</td>
-                <td class="service_duration">${val.start_time}</td>
+                <td class="service_duration">${start_time.getDate()}/${start_time.getMonth()}/${start_time.getFullYear()}  ${start_time.getHours()}:${start_time.getMinutes()}</td>
 
                
             </tr>
