@@ -5,10 +5,10 @@
         <thead>
             <tr>
                 
-                <th scope="col">Email</th>
-                <th scope="col">Navn</th>
-                <th scope="col">Tlf-nummer</th>
-                <th scope="col">Slet konto</th>
+                <th scope="col">services</th>
+                <th scope="col">products</th>
+                <th scope="col">navn</th>
+                <th scope="col">start time</th>
             </tr>
         </thead>
         <tbody id="servicelist">
@@ -26,39 +26,14 @@
             service_body.innerHTML += `
             <tr>
   
-                <td class="service_name">${val.start_time}</td>
-                <td class="service_price"> ${val.name}</td>
-                <td class="service_duration">${val.tlf}</td>
-                <td scope="col">
-                        <a class="btn btn-danger" href="/userAccount/delete/${val.email}">Slet</a>
-                    </td>
+                <td class="service_name">${val.services}</td>
+                <td class="service_price"> ${val.products}</td>
+                <td class="service_duration">${val.name}</td>
+                <td class="service_duration">${val.start_time}</td>
+
                
             </tr>
-            <tr style="display:none;">
-                <td>
-                </td>
-                <td>
-                    <div style="display: none">
-                        <input class="form-control service_name" value="${val.start_time}" />
-                    </div>
-                </td>
-                <td><div style="display: none">
-                        <input class="form-control service_price" value="${val.name}" />
-                    </div>
-                </td>
-                <td>
-                    <div style="display: none">
-                        <input class="form-control service_duration" value="${val.tlf}" />
-                    </div>
-                </td>
-                </td>
-                <td>
-                    <div style="display:none">
-                    <button class="btn btn-success save-item" data-id="${val.id}">Gem</button>
-                    <button class="btn btn-warning cancel-changes">Luk</button>
-                    </div>
-                </td>
-            </tr>
+            
             `;
         }
         
