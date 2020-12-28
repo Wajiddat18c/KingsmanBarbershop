@@ -33,17 +33,9 @@
                 <p>Tidspunkt:</p>
                 <div id="times">(Vælg en dag først)</div>
                 <br>
-                <!--
-                <button type="submit" class="btn btn-success">
-                    Næste
-                </button>
-            -->
             </div>
             </div>
         </div>
-        
-        
-        <!--<input id="daydate" class="form-control" name="timestamp" type="text">-->
         
         <div class="card">
             <div class="card-body">
@@ -56,7 +48,7 @@
                 <!-- <label for="email">E-mail:</label> -->
                 <input name="email" class="form-control" id="email" placeholder="email" type="text">
                 <p>
-                    Opret ny bruger: <input type="checkbox" id="opretbruger">
+                    Opret ny bruger: <input type="checkbox" name="create_user" id="opretbruger">
                 </p>
                 <input name="password" id="password" class="form-control" placeholder="Kodeord" type="password" disabled style="display: none;">
                 </div>
@@ -102,12 +94,6 @@
                     let end_time = new Date(new Date(reserved[book].start_time).getTime()+reserved[book].duration*60000);
                     reserved[book].start_time = new Date(reserved[book].start_time);
                     reserved[book].end_time = end_time;
-                    /*
-                    //Testing if enddate works
-                    console.log("start: "+start_time)
-                    console.log("duration: "+reserved[book].duration);
-                    console.log("slut: "+ end_time);
-                    */
                 }
                 let closed = new Date(Date.parse(e.target.value+"T16:00"))
                 document.getElementById("times").innerHTML = "";
@@ -168,17 +154,6 @@
                     </div>
                 </div>
                 `;
-
-                /*
-                serviceDiv.innerHTML += `
-                <div>
-                    <input type="checkbox" name="service" value='{"id": ${val.id}, "name": "${val.name}", "price": ${val.price}}'>
-                        <span>
-                            ${val.name} - ${val.price} kr,-
-                        </span>
-                </div>
-                `;
-                */
             }
 
             $(() => {
@@ -236,28 +211,9 @@
                     </div>
                 </div>
                 `
-                /*
-                document.getElementById("productList").innerHTML +=
-                    `<div>
-                        <input type="checkbox" name="products" value=' {"id": ${val.id}, "name": "${val.name}", "price": "${val.price}" } '>
-                        <span>
-                            ${val.name} - ${val.price} kr,-
-                        </span>
-                        <span>
-                            antal:
-                        </span>
-                        <select name="count">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>`;
-                    */
             }
             $(() => {
-                $(".font-weight-bold").on("click", function(e){
+                $("h4.font-weight-bold").on("click", function(e){
                     $(e.target.nextElementSibling).slideToggle()
                 }) 
                 $(".count").change(function(e){
