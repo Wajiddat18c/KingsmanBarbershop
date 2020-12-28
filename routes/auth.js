@@ -69,6 +69,7 @@ const footerPage = fs.readFileSync(
   
     if (name && password) {
       // password requirements
+      console.log(password)
       if (password.length < 8) {
         return res
           .status(400)
