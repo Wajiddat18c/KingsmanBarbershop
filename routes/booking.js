@@ -34,17 +34,6 @@ router.get("/bookings", async (req, res) => {
 });
 
 router.get("/book", async (req, res) => {
-    //adminlogin
-    if (req.session.adminTrue === true) {
-        return res.send(adminHeader+adminBookPage+footer);
-
-    }
-    //userlogin
-    
-    else if (req.session.isOn === true) {
-        return res.send(userHeader+bookFormPage+footer);
-
-    }
 
     return res.send(header+bookFormPage+footer);
 });
@@ -149,63 +138,6 @@ router.post("/booking_dates", async (req, res) => {
     const duration_html = `<input type=hidden id="duration" value=${totaltime} />`;
     return res.send(header+duration_html+booking_dates+footer);
 });
-router.post("/booking", async (req, res) => {
-    validate_services(req,res);
-    console.log(req.body.timeslot);
-    console.log(req.body.daydate);
-    req.session.timestamp = escape(req.body.daydate)+" "+escape(req.body.timeslot);
-    //Insert customer
-    const customer = await Customer.query().insert({
-        name: req.session.name,
-        email: req.session.email,
-        tlf: req.session.tlf
-    });
-    //Insert booking
-    console.log(req.session.timestamp);
-    const appointment = await Booking.query().insert({
-        customer_id: customer.id,
-        start_time: req.session.timestamp,
-        service_id: 1
-    });
-    let total = 0;
-    let mail_items = "";
-    let mail_items_html = "";
-    //Insert services
-    for (const i in req.session.services) {
-        const service = req.session.services[i];
-        total += service.price;
-        service_str =
-            `- ${service.name}, ${service.price} kr,-
-            `;
-        mail_items += service_str;
-        mail_items_html += service_str + "<br>";
-        await BookingServices.query().insert({
-            booking_id: appointment.id,
-            service_id: escape(service.id)
-        });
-        
-    }
-    //Insert products
-    let mail_products = "";
-    let mail_products_html = "";
-    for (const i in req.session.products) {
-        const product = req.session.products[i];
-        total += product.price;
-        product_str =
-            `- ${product.name}, ${product.price} kr,-
-            `;
-        mail_products += product_str;
-        mail_products_html += product_str + "<br>";
-        await BookingProducts.query().insert({
-            booking_id: appointment.id,
-            amount: 1,
-            product_id: escape(product.id)
-        });
-        
-    }
-    return res.send("success "+total);
-    
-})
 
 router.post("/book", async (req, res) => {
     //Noter test korrekte formater for data, eventuelt om kunden allerede findes, 
@@ -216,18 +148,17 @@ router.post("/book", async (req, res) => {
     await validate_booking(req, res);
     const email = escape(req.body.email);
     const name = escape(req.body.name);
-    const password = escape(req.body.password);
+    
     const tlf = escape(req.body.tlf);
-    //const timestamp = escape(req.body.timestamp);
+    const create_user = escape(req.body.create_user);
     const timestamp = escape(req.body.daydate)+" "+escape(req.body.timeslot);
     const services = jsonParser(req.body.service);
     const products = jsonParser(req.body.products);
 
 
 
-        if(password !== undefined){
-            console.log("pw", password);
-            console.log(password.length);
+        if(create_user === true){
+            const password = escape(req.body.password);
             if (password.length < 8) {
                 return res
                   .status(400)
@@ -283,7 +214,7 @@ router.post("/book", async (req, res) => {
                       });
                         req.session.email = email;
                         req.session.password = password;
-                        return res.redirect("/");
+                        req.session.isOn = true;
                       }
                     });
                 } catch (error) {
