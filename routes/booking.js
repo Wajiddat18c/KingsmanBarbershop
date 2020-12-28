@@ -26,7 +26,6 @@ const mailCreds = require("../config/mailCreds");
 const Service = require('../models/Service');
 
 const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
-const userBookFromPage = fs.readFileSync(__dirname + '/../public/userlogin/user_bookform.html', "utf8");
 const adminBookPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_book.html', "utf8");
 const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 
@@ -41,12 +40,12 @@ router.get("/book", async (req, res) => {
 
     }
     //userlogin
-    /*
+    
     else if (req.session.isOn === true) {
-        return res.send(userHeader+userBookFromPage+footer);
+        return res.send(userHeader+bookFormPage+footer);
 
     }
-*/
+
     return res.send(header+bookFormPage+footer);
 });
 router.get("/book/:error", async (req, res) => {

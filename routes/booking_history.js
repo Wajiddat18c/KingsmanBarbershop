@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const Booking = require('../models/Booking');
 const Customer = require('../models/Customer');
-const request = require('request');
+const BookingService = require("../models/BookingServices");
+const BookingProducts = require("../models/BookingProducts")
+const { raw } = require('objection');
+
 
 
 const fs = require("fs");
@@ -27,29 +30,20 @@ const footerPage = fs.readFileSync(
 
   router.get("/showhistory", async(req,res) =>{
 
- let info = []
- let bookingId = []
+  let email = req.session.email
 
-    request('http://localhost:4000/users', async(error, response, body) => {
-    console.log('statusCode:', response && response.statusCode); 
-    const obj = JSON.parse(body);
-    email = obj[0].email
-    const cus = await Customer.query()
-    .select("*")
-    .where("email", email)
+  res.send(await Booking.query().select("booking.id",raw('GROUP_CONCAT(" ", services.name)').as("services"),raw('GROUP_CONCAT(" ", products.name)').as("products"), "customer.name", "start_time")
+  .leftJoin("booking_services", "booking.id", "booking_services.booking_id")
+  .leftJoin("services", "booking_services.service_id", "services.id")
+  .innerJoin("customer", "customer.id", "booking.customer_id")
+  .leftJoin("booking_products", "booking.id", "booking_products.booking_id")
+  .leftJoin("products", "booking_products.product_id", "products.id")
+  .groupBy("booking.id")
+  .where("customer.email", email));
 
-    for (let i = 0; i < cus.length; i++) {
-        //console.log(cus[i].email)
-        //info.push(await Booking.query().withGraphFetched('customer').where("customer_id", cus[i].id))
-        info.push(await Booking.query().where("customer_id", cus[i].id))
-        bookingId.push(await Booking.query().select("id").where("customer_id", cus[i].id))
-      }
-
-      console.log(bookingId);
-    return res.send(info);
     });
 
-});
+
 
 
 

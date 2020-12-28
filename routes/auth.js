@@ -69,6 +69,7 @@ const footerPage = fs.readFileSync(
   
     if (name && password) {
       // password requirements
+      console.log(password)
       if (password.length < 8) {
         return res
           .status(400)
@@ -250,7 +251,7 @@ const footerPage = fs.readFileSync(
     }
 
     else if (req.session.isOn === true) {
-      return res.send ( userHeader + userIndexPage + footerPage);
+      return res.send ( userHeader + IndexPage + footerPage);
     }else{
       
       return res.send (headerPage + IndexPage + footerPage);
