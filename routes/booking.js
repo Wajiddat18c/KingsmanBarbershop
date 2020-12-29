@@ -132,22 +132,22 @@ router.post("/book", async (req, res) => {
     const products = jsonParser(req.body.products);
 
 
-
-        if(create_user === true){
+        if(create_user === "on"){
+            console.log("test")
             const password = escape(req.body.password);
+            console.log(password)
             if (password.length < 8) {
-                return res.redirect("/booking/Password skal være mindst 8 tegn langt");
+                console.log("test")
+                return res.redirect("/book/Password skal være mindst 8 tegn langt");
               } else {
                 try {
                   User.query()
                     .select("name")
-                    .where("name", name)
                     .orWhere("email", email)
-                    .orWhere("tlf", tlf)
                     .limit(1)
                     .then(async (foundUser) => {
                       if (foundUser.length > 0) {
-                        return res.redirect("/booking/Brugeren findes allerede");
+                        return res.redirect("/book/Brugeren findes allerede");
                       } else {
                         const hashedPassword = await bcrypt.hash(password, saltRounds);
           
