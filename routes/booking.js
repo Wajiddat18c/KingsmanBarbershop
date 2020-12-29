@@ -54,30 +54,6 @@ router.get("/booking/:error", async (req, res) => {
 router.get("/booking", async (req, res) => {
     return res.send(header+booking_services+footer);
 });
-
-function validate_services(req, res){
-    /*
-    That regex will check that the mail address is a non-space separated sequence of characters of length greater than one,
-    followed by an @, followed by two sequences of non-spaces characters of length two or more separated by a .
-    */
-   try{
-    if(!req.session.email.match(/^\S{1,}@\S{2,}\.\S{2,}$/))
-        return res.redirect("/booking/Ugyldig E-mail");
-    //Regex matches 8 digits
-    if(!req.session.tlf.match(/^\d{8}$/))
-        return res.redirect("/booking/"+encodeURIComponent("Ugyldigt telefon nummer, format, 8x# : ########"));
-    //Regex matches word(s) that's atleast 2 characters
-    if(!req.session.name.match(/^\w{2,}$/))
-        return res.redirect("/booking/Skriv venligst et navn på minimum 2 bogstaver.");
-    //Checks if there's atleast 1 choosen service
-    if(req.session.services.length<1)
-        return res.redirect("/booking/Vælg mindst 1 service.");
-    }
-    catch(error){
-        console.log(error);
-        return res.redirect("/booking/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
-    }
-};
 async function validate_booking(req, res){
     /*
     That regex will check that the mail address is a non-space separated sequence of characters of length greater than one,
@@ -90,7 +66,7 @@ async function validate_booking(req, res){
     if(!req.body.tlf.match(/^\d{8}$/))
         return res.redirect("/book/"+encodeURIComponent("Ugyldigt telefon nummer, format, 8x# : ########"));
     //Regex matches word(s) that's atleast 2 characters
-    if(!req.body.name.match(/^\w{2,}$/))
+    if(!req.body.name.match(/^[a-zA-z ]{2,}$/))
         return res.redirect("/book/Skriv venligst et navn på minimum 2 bogstaver.");
     //Checks if there's atleast 1 choosen service
     if(req.body.service.length<1)
@@ -160,9 +136,7 @@ router.post("/book", async (req, res) => {
         if(create_user === true){
             const password = escape(req.body.password);
             if (password.length < 8) {
-                return res
-                  .status(400)
-                  .send({ response: "Password must be atleast 8 char long" });
+                return res.redirect("/booking/Password skal være mindst 8 tegn langt");
               } else {
                 try {
                   User.query()
@@ -173,7 +147,7 @@ router.post("/book", async (req, res) => {
                     .limit(1)
                     .then(async (foundUser) => {
                       if (foundUser.length > 0) {
-                        return res.status(400).send({ response: "User already exists" });
+                        return res.redirect("/booking/Brugeren findes allerede");
                       } else {
                         const hashedPassword = await bcrypt.hash(password, saltRounds);
           
