@@ -19,12 +19,12 @@ const footerPage = fs.readFileSync(
 
 
   router.get("/history", (req, res) => {
-    // if(req.session.isOn == true){
+    if(req.session.isOn == true){
       return res.send( userHeader + historyPage + footerPage);
 
-    // }else{
-      // return res.send("LOGIN FIRST!");
-    // }
+    }else{
+      return res.send("LOGIN FIRST!");
+    }
 
   });
 
