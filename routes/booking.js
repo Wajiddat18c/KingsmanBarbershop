@@ -279,6 +279,9 @@ router.post("/book", async (req, res) => {
         // -----------------
         // setup e-mail data
         // -----------------
+        // vil du annullere kan du gøre det her: ${cancel},
+        // <br>vil du annullere kan du gøre det her: <a href='${cancel}'>${cancel}</a>,
+
         let cancel = "https://localhost:3000/cancel";
         let link = "https://localhost:3000";
         var mailOptions = {
@@ -294,14 +297,12 @@ router.post("/book", async (req, res) => {
             
             I alt: ${total} kr,-
             
-            vil du annullere kan du gøre det her: ${cancel},
             
             Hav en god dag.`, // plaintext body
             html:
                 `Hej ${name}, 
                 <br>
                 <br>Her er en bekræftelse på din tidsbestilling hos <a href='${link}'>Kingsman barbershop</a>, d. ${timestamp},
-                <br>vil du annullere kan du gøre det her: <a href='${cancel}'>${cancel}</a>,
                 <br>
                 <br>Du har bestilt: 
                 <br>
