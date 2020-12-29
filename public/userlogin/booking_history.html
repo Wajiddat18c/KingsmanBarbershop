@@ -1,13 +1,16 @@
-<h3>Brugerinfo</h3>
+<h3 class="text-center">Ordre historik</h3>
 
 <div>
-    <table class="table">
-        <thead>
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
                 
                 <th scope="col">services</th>
+                <th scope="col">service pris</th>
                 <th scope="col">products</th>
+                <th scope="col">products pris</th>
                 <th scope="col">navn</th>
+                <th scope="col">Tlf nummer</th>
                 <th scope="col">start time</th>
             </tr>
         </thead>
@@ -27,8 +30,11 @@
             <tr>
   
                 <td class="service_name">${val.services}</td>
+                <td class="service_name">${val.ydelsespris}</td>
                 <td class="service_price"> ${val.products}</td>
+                <td class="service_price"> ${val.produktpris}</td>
                 <td class="service_duration">${val.name}</td>
+                <td class="service_duration">${val.tlf}</td>
                 <td class="service_duration">${val.start_time}</td>
 
                
