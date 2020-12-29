@@ -157,6 +157,10 @@ const footerPage = fs.readFileSync(
   router.get("/login", (req, res) => {
     return res.send(headerPage + loginPage + footerPage);
   });
+  router.get("/login/:error", (req, res) => {
+    let extrahtml = `<input type="hidden" value="${req.params.error}" id="error" />`
+    return res.send(headerPage + extrahtml + loginPage + footerPage);
+  });
 
   router.post("/login", (req, res) => {
     const { email, password } = req.body;
@@ -193,7 +197,7 @@ const footerPage = fs.readFileSync(
                   return res.redirect("/");
                 } else {
                   console.log(req.ip + " typed a wrong password");
-                  return res.send({ response: "Wrong password!" });
+                  return res.redirect("/login/Forkert login");
                 }
               })
               .catch((message) => console.log(message));
@@ -202,13 +206,11 @@ const footerPage = fs.readFileSync(
           } else {
             // return res.send({ response: "User added", username});
             console.log("No user found!");
-            return res.send({ response: "No user found!" });
+            return res.redirect("/login/Forkert login");
           }
         });
     } catch (error) {
-      return res
-        .status(500)
-        .send({ response: "Something went wrong with the database" });
+      return res.redirect("/login/Forkert login");
     }
   });
 

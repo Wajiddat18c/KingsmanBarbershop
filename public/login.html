@@ -4,6 +4,19 @@
 
   
   <div class="container">
+    <p id="errormsg" style="display: none;"  class="alert alert-warning col-md-6 offset-md-3 text-center">Forkert login</p>
+    <script>
+      try{
+                $(()=> {
+                    if($("#error").val()){
+                        $("#errormsg").text($("#error").val());
+                        $("#errormsg").css("display", "block");
+                    }
+                })
+                
+            }
+            catch{}
+    </script>
     <label for="email"><b>Email</b></label>
     <input type="text" placeholder="Email" name="email" required id="email" class="form-control">
 
