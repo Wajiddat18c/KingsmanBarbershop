@@ -73,7 +73,7 @@ const footerPage = fs.readFileSync(
     .limit(1)
     .then(async (foundEmail) => {
       if (foundEmail.length > 0) {
-        return res.redirect("/Already subscribed");
+        return res.redirect("/error/Already subscribed");
       } else {
 
         const newEmail = await Email.query().insert({
@@ -116,9 +116,7 @@ const footerPage = fs.readFileSync(
         }
       });
   } catch (error) {
-    return res
-      .status(500)
-      .send({ response: "Something went wrong with the database" });
+    return res.redirect("/error/Database error, try again");
   }
 
 });

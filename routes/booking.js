@@ -46,14 +46,6 @@ router.get("/unavailable_times", async(req, res) => {
     return res.send(await Booking.query().select("id", "service_id", "start_time").whereRaw("DATE(start_time)>CURRENT_TIMESTAMP()"));
 });
 
-router.get("/booking/:error", async (req, res) => {
-    const error = escape(req.params.error);
-    return res.send(header+`<input type="hidden" value="${error}" id="error" />`+booking_services+footer);
-});
-
-router.get("/booking", async (req, res) => {
-    return res.send(header+booking_services+footer);
-});
 async function validate_booking(req, res){
     /*
     That regex will check that the mail address is a non-space separated sequence of characters of length greater than one,
@@ -77,43 +69,6 @@ async function validate_booking(req, res){
         return res.redirect("/book/Ukendt fejl, prøv igen, eller kontakt admininistratoren.");
     }
 };
-
-router.post("/booking_products", async (req, res) => {
-    req.session.email = escape(req.body.email);
-    req.session.name = escape(req.body.name);
-    req.session.tlf = escape(req.body.tlf);
-    services = jsonParser(req.body.service);
-
-    
-    //Adds service json object to session.
-    req.session.services = [];
-    for (const i in services) {
-            const service = services[i];
-            req.session.services.push({id: service.id, name: service.name, price: service.price});
-    }
-    
-    validate_services(req,res);
-
-    return res.send(header+booking_products+footer);
-});
-
-router.post("/booking_dates", async (req, res) => {
-    validate_services(req, res);
-    products = jsonParser(req.body.products);
-    req.session.products = [];
-    for (const i in products) {
-        const product = products[i];
-        req.session.products.push({id: product.id, name: product.name, price: product.price, count: product.count});
-    }
-    console.log(req.session.products);
-    totaltime = 0;
-    for (const i in req.session.services) {
-        service = await Service.query().select("duration").where("id", "=", req.session.services[i].id);
-        totaltime += service[0].duration;
-    }
-    const duration_html = `<input type=hidden id="duration" value=${totaltime} />`;
-    return res.send(header+duration_html+booking_dates+footer);
-});
 
 router.post("/book", async (req, res) => {
     //Noter test korrekte formater for data, eventuelt om kunden allerede findes, 
