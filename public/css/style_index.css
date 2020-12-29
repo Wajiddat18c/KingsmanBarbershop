@@ -2,14 +2,13 @@
   text-align: center;
   margin: 0;
   box-sizing: border-box;
-  border: 10px solid #f1f1f1;
   margin-bottom: 100px;
 }
 
 .newsletter{
     margin-top: 100px;
   text-align: center;
-  border: 10px solid grey;
+  /*border: 10px solid grey;*/
   padding: 20px;
 }
 

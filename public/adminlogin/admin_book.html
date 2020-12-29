@@ -29,6 +29,7 @@
     (values) => {
         for (const row in values) {
             let booking = values[row];
+            let start_time = new Date(Date.parse(booking.start_time));
             document.getElementById("bookings").innerHTML += `
             <tr>
                 <td>
@@ -36,7 +37,7 @@
                 </td>
                 <td>${booking.services}</td>
                 <td>${booking.name}</td>
-                <td>${booking.start_time}</td>
+                <td>${start_time.getDate()}/${start_time.getMonth()}/${start_time.getFullYear()}  ${start_time.getHours()}:${start_time.getMinutes()}</td>
                 <td>
                     <a class="btn btn-primary" href="/admin_booking/${booking.id}">Rediger</a>
                     <a class="btn btn-danger" href="/booking/delete/${booking.id}">Slet</a>
