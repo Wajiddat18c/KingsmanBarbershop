@@ -13,6 +13,8 @@ const headerPage = fs.readFileSync(
   __dirname + "/../public/header.html",
   "utf8"
 );
+
+const indexPage = fs.readFileSync( __dirname + "/../public/index.html", "utf8")
 const contactForm = fs.readFileSync(
   __dirname + "/../public/contact_form.html",
   "utf8"
@@ -71,7 +73,7 @@ route.post("/contact", (req, res) => {
         console.log("Message sent: " + info.response);
     });
 
-    res.send(headerPage + footerPage)
+    res.send(headerPage + indexPage + footerPage)
 });
 
 module.exports = route;

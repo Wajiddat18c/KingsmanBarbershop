@@ -4,7 +4,7 @@
       <link rel="stylesheet" type="text/css" href="style_contact.css">
   </head>
   <body>
-    <form method="POST" action="/contact"></form>
+    <form method="POST" action="/contact">
     <div class="kontakt formular">
       <h2>Kontakt formular</h2>
       <h3>vi svare altid på på stillet spørgsmål!</h3>
@@ -13,16 +13,15 @@
 
     <div class="kontakt_formular">
 
-      <form action="/action_page.php">
         <label for="fname">Navn</label>
-        <input type="text" id="fname" name="firstname" placeholder="Navn">
+        <input type="text" id="fname" name="name" placeholder="Navn">
     
         <label for="lname">Email</label>
-        <input type="text" id="lname" name="lastname" placeholder="Email">
+        <input type="text" id="lname" name="email" placeholder="Email">
     
     
         <label for="subject">Emne</label>
-        <textarea id="subject" name="Emne" placeholder="Dit spørgsmål..." style="height:200px"></textarea>
+        <textarea id="subject" name="question" placeholder="Dit spørgsmål..." style="height:200px"></textarea>
     
         <input type="submit" value="Send">
       </form>
