@@ -248,7 +248,7 @@ const footerPage = fs.readFileSync(
       return res.send( userHeader + userAccount + footerPage);
 
     }else{
-      return res.send("LOGIN FIRST!");
+      return res.redirect("/login");
     }
 
 

@@ -23,7 +23,7 @@ const footerPage = fs.readFileSync(
       return res.send( userHeader + historyPage + footerPage);
 
     }else{
-      return res.send("LOGIN FIRST!");
+      return res.redirect("/login");
     }
 
   });
@@ -47,7 +47,7 @@ const footerPage = fs.readFileSync(
       .groupBy("booking.id")
       .where("customer.email", email));
     }else{
-      return res.send("LOGIN FIRST!");
+      return res.redirect("/login");
     }
     });
 
