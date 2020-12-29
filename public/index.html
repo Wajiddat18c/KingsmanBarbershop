@@ -53,10 +53,23 @@
     <div class="newsletter">
 
       <h2>Tilmeld dig vores nyhedsbrev</h2>
-
+      <p id="errormsg" style="display: none;"> <span class="alert alert-warning"></span></p>
+      <script>
+        try{
+                  $(()=> {
+                      if($("#error").val()){
+                          $("#errormsg > span").text($("#error").val());
+                          $("#errormsg").css("display", "block");
+                      }
+                  })
+                  
+              }
+              catch{}
+      </script>
       <input placeholder="Email address" autofocus="" required="" type="email" id="email" class="form-control col-md-8 offset-md-2" name="email">
       <label>
         <input type="checkbox" checked="checked" name="subscribe" required> Newsletter
+        
       </label> 
 
       <div class="submit_button">

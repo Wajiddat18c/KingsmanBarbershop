@@ -73,7 +73,7 @@ const footerPage = fs.readFileSync(
     .limit(1)
     .then(async (foundEmail) => {
       if (foundEmail.length > 0) {
-        return res.status(400).send({ response: "Email already exists" });
+        return res.redirect("/Already subscribed");
       } else {
 
         const newEmail = await Email.query().insert({

@@ -259,6 +259,36 @@ const footerPage = fs.readFileSync(
 
     });
 
+    router.get("/", (req, res) => {
+      if (req.session.adminTrue === true){
+  
+      return res.send(adminHeader + adminIndexPage + footerPage);
+      }
+  
+      else if (req.session.isOn === true) {
+        return res.send ( userHeader + IndexPage + footerPage);
+      }else{
+        
+        return res.send (headerPage + IndexPage + footerPage);
+      }
+  
+      });
+      router.get("/:error", (req, res) => {
+        let extrahtml = `<input type="hidden" value="${req.params.error}" id="error" />`
+        if (req.session.adminTrue === true){
+    
+        return res.send(adminHeader + extrahtml+ adminIndexPage + footerPage);
+        }
+    
+        else if (req.session.isOn === true) {
+          return res.send ( userHeader + extrahtml+ IndexPage + footerPage);
+        }else{
+          
+          return res.send (headerPage + extrahtml+ IndexPage + footerPage);
+        }
+    
+        });
+
     
 
 module.exports = router;
