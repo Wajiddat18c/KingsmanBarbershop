@@ -1,10 +1,9 @@
-<h3>Ydelser priser</h3>
+<h3>Priser for vores services</h3>
 
 <div>
-    <table class="table">
-        <thead>
+    <table class="table-dark table">
+        <thead class="thead-light">
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">Navn</th>
                 <th scope="col">Pris</th>
                 <th scope="col">Varighed</th>
@@ -24,36 +23,10 @@
             
             service_body.innerHTML += `
             <tr>
-                <td>${val.id}</td>
                 <td class="service_name">${val.name}</td>
-                <td class="service_price"> ${val.price}</td>
-                <td class="service_duration">${val.duration}</td>
+                <td class="service_price"> ${val.price} kr,-</td>
+                <td class="service_duration">${val.duration} minutter</td>
                
-            </tr>
-            <tr style="display:none;">
-                <td>
-                </td>
-                <td>
-                    <div style="display: none">
-                        <input class="form-control service_name" value="${val.name}" />
-                    </div>
-                </td>
-                <td><div style="display: none">
-                        <input class="form-control service_price" value="${val.price}" />
-                    </div>
-                </td>
-                <td>
-                    <div style="display: none">
-                        <input class="form-control service_duration" value="${val.duration}" />
-                    </div>
-                </td>
-                </td>
-                <td>
-                    <div style="display:none">
-                    <button class="btn btn-success save-item" data-id="${val.id}">Gem</button>
-                    <button class="btn btn-warning cancel-changes">Luk</button>
-                    </div>
-                </td>
             </tr>
             `;
         }
