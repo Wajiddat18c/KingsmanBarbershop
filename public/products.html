@@ -1,6 +1,6 @@
 <h2>Produkter</h2>
 <p>Vores udvalg af produkter til afhentning.</p>
-<div id="productWrapper">
+<div id="productWrapper" class="row">
   
 </div>
 <script>
@@ -15,12 +15,14 @@
           let product = values[i];
           $("#productWrapper").append(`
 
-          <div class="column">
-            <div class="card">
+          <div class="col-md-4">
+            <div class="card p-0">
               <img src="Sibel.jpg" alt="saks" style="width:100%">
               <h3>${product.name}</h3>
-              <p>${product.description}</p>
-              <p class="italic">${product.price} kr,-</p>
+              <div class="bg-dark text-light p-3">
+                <p>${product.description}</p>
+                <h5 class="font-italic">${product.price} kr,-</h5>
+              </div>
             </div>
           </div>
           `);
