@@ -33,8 +33,8 @@ const newpasswordPage = fs.readFileSync(
     "utf8"
 );
 
-router.get("/resetpassword", (req, res, next) => {
-    return res.send(headerPage + extrahtml + resetpasswordPage + footerPage);
+router.get("/resetpassword", (req, res) => {
+    return res.send(headerPage  + resetpasswordPage + footerPage);
 });
 
 router.get("/resetpassword/error/:error", (req, res) => {
@@ -44,8 +44,8 @@ router.get("/resetpassword/error/:error", (req, res) => {
 
 router.get("/resetpassword/:reset_token", (req, res) => {
     try {
-        
-        if(req.params.reset_token === null){
+        const reset_token = escape(req.params.reset_token);
+        if(reset_token === null){
             return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.`);
         }
         User.query()
@@ -67,7 +67,34 @@ router.get("/resetpassword/:reset_token", (req, res) => {
         return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin..`);
     }
 });
-router.get("/resetpassword/:reset_token/error/:error", (req, res, next) => {
+router.get("/resetpassword/:reset_token/error/:error", (req, res) => {
+    try {
+        const reset_token = escape(req.params.reset_token);
+        if(reset_token === null){
+            return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.`);
+        }
+        User.query()
+            .select("tlf")
+            .where("reset_token", reset_token).
+            then(async (foundUser) => {
+                if (foundUser.length < 1)
+                    return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.`);
+                else {
+                    let extrahtml = `
+                    <input type="hidden" value="${req.params.error}" id="error" />
+                    <input type="hidden" value="${reset_token}" id="reset_token" />
+                    `;
+                    return res.send(headerPage + extrahtml + newpasswordPage + footerPage);
+                }
+            })
+            .catch(async (reject) => {
+                console.log(reject)
+                return res.redirect("/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.");
+            })
+    } catch (error) {
+        console.log(error);
+        return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin..`);
+    }
 });
 
 
@@ -114,14 +141,20 @@ router.post("/resetpassword", async (req, res) => {
 router.post("/resetpassword/:reset_token", async (req, res) => {
     try {
         const password = escape(req.body.password);
+        const reset_token = escape(req.params.reset_token);
+        if(password.length<8)
+            return res.redirect(`/resetpassword/${reset_token}/error/Kodeordet skal være mindst 8 tegn.`);
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const rowsAffected = await User.query()
-            .patch({ password: hashedPassword, reset_token: null })
-            .where("reset_token", escape(req.params.reset_token))
-        return res.send(headerPage + "<h3>Password changed successfully</h3><a href=\"/login\">Login</a>" + footerPage);
+        const affectedRows = await User.query()
+        .update({ password: hashedPassword, reset_token: null })
+        .where("reset_token", reset_token);
+        if(affectedRows>0)
+            return res.send(headerPage + "<h3>Password changed successfully</h3><a class='btn btn-info' href=\"/login\">Login</a>" + footerPage);
+        else
+            return res.redirect("/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.");
     } catch (error) {
-        console.log("new err");
-        return res.send({ response: error.message });
+        console.log("password change error: "+error);
+        return res.redirect("/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.");
     }
 })
 
