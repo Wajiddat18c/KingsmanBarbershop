@@ -33,34 +33,43 @@ const newpasswordPage = fs.readFileSync(
     "utf8"
 );
 
-router.get("/resetpassword", (req, res) => {
-    return res.send(headerPage + resetpasswordPage + footerPage);
-})
+router.get("/resetpassword", (req, res, next) => {
+    return res.send(headerPage + extrahtml + resetpasswordPage + footerPage);
+});
+
+router.get("/resetpassword/error/:error", (req, res) => {
+    let extrahtml = `<input type="hidden" value="${req.params.error}" id="error" />`;
+    return res.send(headerPage + extrahtml + resetpasswordPage + footerPage);
+});
 
 router.get("/resetpassword/:reset_token", (req, res) => {
     try {
-
+        
         if(req.params.reset_token === null){
-            return res.send({response : "parameter can't be null"});
+            return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.`);
         }
-
         User.query()
             .select("tlf")
-            .where("reset_token", escape(req.params.reset_token)).
+            .where("reset_token", reset_token).
             then(async (foundUser) => {
                 if (foundUser.length < 1)
-                    return res.send({ response: "incorrect reset_token" });
+                    return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.`);
                 else {
                     return res.send(headerPage + newpasswordPage + footerPage);
                 }
             })
-            .catch(async (PromiseRejectionEvent) => {
-                return res.send({ response: "incorrect reset_token" });
+            .catch(async (reject) => {
+                console.log(reject)
+                return res.redirect("/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin.");
             })
     } catch (error) {
-        return res.send({ response: error });
+        console.log(error);
+        return res.redirect(`/resetpassword/error/Ugyldig token, prøv igen. Få tilsendt nyt nedenunder eller kontakt admin..`);
     }
-})
+});
+router.get("/resetpassword/:reset_token/error/:error", (req, res, next) => {
+});
+
 
 router.post("/resetpassword", async (req, res) => {
     try {
@@ -68,7 +77,6 @@ router.post("/resetpassword", async (req, res) => {
         const token = uuidv4();
         const count = await User.query()
             .patch({ reset_token: token })
-            .where("tlf", tlf)
             .andWhere("email", email);
         if (count < 1) {
             res.send({ response: "incorrect info" });
