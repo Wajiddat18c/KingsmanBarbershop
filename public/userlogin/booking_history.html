@@ -26,6 +26,11 @@
             
             service_body = document.getElementById("servicelist");
             let start_time = new Date(Date.parse(val.start_time));
+            if(val.products == null)
+                {
+                    val.products = "";
+                    val.produktpris = "";
+                }
             service_body.innerHTML += `
             <tr>
   
