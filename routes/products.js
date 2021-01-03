@@ -10,6 +10,7 @@ const products = fs.readFileSync(__dirname + '/../public/products.html', "utf8")
 const header = fs.readFileSync(__dirname + '/../public/header.html', "utf8");
 const admin_products = fs.readFileSync(__dirname+ '/../public/adminlogin/admin_products.html', "utf8");
 const admin_edit_product = fs.readFileSync(__dirname+ '/../public/adminlogin/admin_edit_product.html', "utf8");
+const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
 
 router.get("/products", async (req, res) => {
     return res.send(await Product.query().select("products.id", "products.name", "products.description", "products.price", raw("categories.name as category"))
@@ -21,7 +22,11 @@ router.get("/showproducts", async(req,res) =>{
 });
 
 router.get("/showProduct", (req,res) => {
+    if (req.session.isOn === true) {
+        return res.send ( userHeader + products + footer);
+      }else{
     return res.send(header + products + footer)
+      }
 });
 
 router.get("/product/get/:id", async (req, res) =>{

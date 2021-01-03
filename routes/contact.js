@@ -24,9 +24,11 @@ const UserheaderPage = fs.readFileSync(
   "utf8"
 );
 route.get("/contact", (req, res) => {
-  
+  if (req.session.isOn === true) {
+    return res.send ( UserheaderPage + contactForm + footerPage);
+  }else{
     return res.send(headerPage + contactForm + footerPage);
-  
+  }
 });
 
 route.post("/contact", (req, res) => {
