@@ -66,6 +66,7 @@
                         $("#name").val(account.name);
                         $("#tlf").val(account.tlf);
                         $("#email").val(account.email);
+                        $("#opretbruger").parent().remove()
                     }
                 }, (reject) => {
                     console.log(reject);
