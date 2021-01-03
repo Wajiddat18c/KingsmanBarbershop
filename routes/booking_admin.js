@@ -43,9 +43,6 @@ router.get("/admin/bookings", async (req, res) => {
       .select(
         "booking.id",
         raw('GROUP_CONCAT(" ", services.name)').as("services"),
-        raw("(IFNULL(SUM(services.price),0)+IFNULL(SUM(products.price),0))").as(
-          "samletpris"
-        ),
         "customer.name",
         "start_time"
       )
