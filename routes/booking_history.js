@@ -34,8 +34,6 @@ const footerPage = fs.readFileSync(
 
     if(req.session.isOn == true){
       let email = req.session.email
-
-
       res.send(await Booking.query().select("booking.id",raw('group_concat(DISTINCT(services.name) separator " ")').as("services"),
       raw('group_concat(distinct(products.name), " , antal:", booking_products.amount)').as("products"),
       raw("SUM(products.price)").as('produktpris'),
@@ -54,9 +52,5 @@ const footerPage = fs.readFileSync(
       return res.redirect("/login");
     }
     });
-
-
-
-
 
 module.exports = router;

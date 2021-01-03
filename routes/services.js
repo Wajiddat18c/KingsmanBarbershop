@@ -54,8 +54,8 @@ router.get("/services/booking/:id", async (req, res) => {
 });
 
 router.post("/services/", async (req, res) => {
-  if(req.session.isOn !== true)
-    res.redirect("/services")
+  if(req.session.adminTrue !== true)
+    return res.redirect("/services")
   console.log(req.body);
   //const {name, price, duration, description} = req.body
   //Checks if it was deleted
@@ -69,7 +69,7 @@ router.post("/services/", async (req, res) => {
 });
 router.put("/services/", async (req, res) => {
   if(req.session.adminTrue !== true)
-    res.redirect("/services")
+    return res.redirect("/services")
   const id = escape(req.body.id);
   const name = escape(req.body.name);
   const price = escape(req.body.price);
@@ -89,7 +89,7 @@ router.put("/services/", async (req, res) => {
 });
 router.delete("/services/", async (req, res) => {
   if(req.session.adminTrue !== true)
-    res.redirect("/services")
+    return res.redirect("/services")
   const id = escape(req.body.id);
   //Checks if it was deleted
   if ((await Service.query().deleteById(id)) == id)

@@ -32,7 +32,8 @@ const adminBookPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_b
 const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 
 router.get("/bookings", async (req, res) => {
-    
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     return res.send(await Booking.query().select());
 });
 

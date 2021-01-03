@@ -4,6 +4,8 @@ const User = require('../models/User');
 
 
 router.get("/accounts", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     return res.send({response: await User.query().select()});
 })
 
