@@ -53,7 +53,7 @@ router.get("/booking/delete/:id", async (req, res) => {
     await BookingProducts.query().delete().where("booking_id", "=", booking_id);
     await Booking.query().delete().where("id", "=", booking_id);
     
-    return res.redirect("/admin_booking");
+    return res.redirect("/");
 })
 
 router.post("/booking_services/service", async (req, res) => {

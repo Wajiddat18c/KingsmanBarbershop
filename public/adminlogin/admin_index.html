@@ -3,3 +3,56 @@
 </h1>
 
 <h3 class="text-justify">Her kan du som admin gå på de forskellige underpaneler for at administrere hjemmesiden</h3>
+
+
+<div>
+    <p>
+        Her får du et overblik over de bookings der foretaget.
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Services</th>
+                <th>Customer</th>
+                <th>Dato & tid</th>
+                <th>Handlinger</th>
+            </tr>
+        </thead>
+        <tbody id="bookings">
+        </tbody>
+    </table>
+</div>
+<script>
+    let bookings = async () => {
+        let response = await fetch("/admin/bookings");
+        return await response.json();
+    };
+    bookings().then(
+    (values) => {
+        for (const row in values) {
+            let booking = values[row];
+            let start_time = new Date(Date.parse(booking.start_time));
+            let timeStr = `${start_time.getHours()}:${start_time.getMinutes().toString().length > 1 ? start_time.getMinutes() : start_time.getMinutes()+"0"}`;
+            document.getElementById("bookings").innerHTML += `
+            <tr>
+                <td>
+                    <a href="/admin_booking/${booking.id}">${booking.id}</a>
+                </td>
+                <td>${booking.services}</td>
+                <td>${booking.name}</td>
+                <td>${start_time.getDate()}/${start_time.getMonth()+1}/${start_time.getFullYear()}  ${timeStr}</td>
+                <td>
+                    <a class="btn btn-danger" href="/booking/delete/${booking.id}">Slet</a>
+                </td>
+            </tr>
+            `;
+        }
+        console.log(values);
+    },
+    (reject) => {
+        console.log(`Bookings weren't received correctly, error: ${reject}`);
+    });
+
+
+</script>
