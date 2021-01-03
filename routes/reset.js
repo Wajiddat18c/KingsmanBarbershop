@@ -109,14 +109,14 @@ router.post("/resetpassword", async (req, res) => {
             res.send({ response: "incorrect info" });
         }
         else {
-            let name = "TEST"
+            let name = ""
 
             var mailOptions = {
                 from: '"Kingsman Barbershop" <wajidnodemailer@gmail.com>', // sender address (who sends)
                 to: `${name} <${email}>`, // list of receivers (who receives)
                 subject: `Gendan glemt kodeord`, // Subject line
-                text: `Hello ${name}, a password reset request was made, please visit http://localhost:4000/resetpassword/${token}`, // plaintext body
-                html: `Hello ${name}, a password reset request was made, please visit <a target="_blank" href="http://localhost:4000/resetpassword/${token}">http://localhost:4000/resetpassword/${token}</a>.`, // html body
+                text: `Hello ${name}, a password reset request was made, please visit https://kingsmanbarbershop.herokuapp.com//resetpassword/${token}`, // plaintext body
+                html: `Hello ${name}, a password reset request was made, please visit <a target="_blank" href="https://kingsmanbarbershop.herokuapp.com/resetpassword/${token}">https://kingsmanbarbershop.herokuapp.com/resetpassword/${token}</a>.`, // html body
             };
             
             // -----------
