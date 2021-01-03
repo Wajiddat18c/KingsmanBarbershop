@@ -13,6 +13,7 @@
                 <th>Services</th>
                 <th>Kunder</th>
                 <th>Dato & tid</th>
+                <th>Samlet pris</th>
                 <th>Handlinger</th>
             </tr>
         </thead>
@@ -39,6 +40,7 @@
                 <td>${booking.services}</td>
                 <td>${booking.name}</td>
                 <td>${start_time.getDate()}/${start_time.getMonth()+1}/${start_time.getFullYear()}  ${timeStr}</td>
+                <td>${booking.samletpris} kr,- </td>
                 <td>
                     <a class="btn btn-primary" href="/admin_booking/${booking.id}">Rediger</a>
                     <a class="btn btn-danger" href="/booking/delete/${booking.id}">Slet</a>

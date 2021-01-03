@@ -23,9 +23,13 @@ router.get("/admin_booking/:id", async (req, res) => {
     return res.send(adminHeader+extra_html+edit_booking+footer);
 });
 router.get("/admin/bookings", async (req, res) => {
-    res.send(await Booking.query().select("booking.id",raw('GROUP_CONCAT(" ", services.name)').as("services"), "customer.name", "start_time")
+    res.send(await Booking.query().select("booking.id",raw('GROUP_CONCAT(" ", services.name)').as("services"),
+    raw('(IFNULL(SUM(services.price),0)+IFNULL(SUM(products.price),0))').as("samletpris"),
+    "customer.name", "start_time")
     .leftJoin("booking_services", "booking.id", "booking_services.booking_id")
     .leftJoin("services", "booking_services.service_id", "services.id")
+    .leftJoin("booking_products", "booking.id", "booking_products.booking_id")
+    .leftJoin("products", "products.id", "booking_products.product_id")
     .innerJoin("customer", "customer.id", "booking.customer_id")
     .groupBy("booking.id").orderBy("booking.start_time", "DESC"));
 });
