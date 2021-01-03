@@ -35,6 +35,8 @@ const footerPage = fs.readFileSync(
   );
 
   router.get("/newsletters", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     return res.send(await Email.query().select());
   });
   router.delete("/newsletters/", async (req, res) => {
@@ -122,11 +124,4 @@ const footerPage = fs.readFileSync(
   }
 
 });
-        
-
-
-
-
-
-
 module.exports = router;

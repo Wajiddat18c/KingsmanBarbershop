@@ -46,6 +46,8 @@ router.get("/admin_products", async (req, res) => {
 });
 
 router.post("/product", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     const { name, description, price, category } = req.body;
     await Product.query().insert({
         name: name,
@@ -57,16 +59,22 @@ router.post("/product", async (req, res) => {
 });
 
 router.get("/product/delete/:id", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     await Product.query().delete().where("id", "=", req.params.id);
     return res.redirect("/admin_products");
 });
 
 router.get("/product/edit/:id", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     const extra_html = `<input type=hidden id="id" name="id" value=${req.params.id} />`;
     return res.send(adminHeader + extra_html + admin_edit_product + footer);
 });
 
 router.post("/product/edit", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     const { name, description, price, category, id } = req.body;
     await Product.query().patch({
         name: name,
@@ -77,7 +85,10 @@ router.post("/product/edit", async (req, res) => {
     return res.redirect("/admin_products"); 
 });
 
+//Delete products from booking
 router.get("/booking_products/id/:booking_id/product/:id", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     let booking_id = escape(req.params.booking_id);
     let product_id = escape(req.params.id);
     await BookingProducts.query().del()

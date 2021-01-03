@@ -13,6 +13,8 @@ const customer = fs.readFileSync(__dirname + '/../public/customer.html', "utf8")
 
 //Get all customers
 router.get("/customers", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     return res.send(await Customer.query().select());
 });
 router.get("/c", (req, res)=>
@@ -21,6 +23,8 @@ router.get("/c", (req, res)=>
 })
 //Get a specific customer
 router.get("/customers/:id", async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     const id = escape(req.params.id);
     return res.send(await Customer.query().select().where("id", id));
 })
@@ -40,6 +44,8 @@ router.get("/customers/delete/:id", async(req, res) =>
 {
     //Får en fejl: Canoot read property of 'id" of undefined
     //På linje 44
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
     try
     {
     const booking = await Booking.query().select("id").where("customer_id", "=", req.params.id);
@@ -53,9 +59,5 @@ router.get("/customers/delete/:id", async(req, res) =>
     {
         console.log(error)
     }
-})
-
-
-
-
+});
 module.exports = router;

@@ -103,8 +103,4 @@ router.patch("/services", async(req, res) => {
   return res.send("fail");
 });
 
-
-
-
-
 module.exports = router;
