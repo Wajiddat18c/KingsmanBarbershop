@@ -30,12 +30,17 @@ const adminBookPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_b
 const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 
 router.get("/bookings", async (req, res) => {
+    
     return res.send(await Booking.query().select());
 });
 
 router.get("/book", async (req, res) => {
 
+    if (req.session.isOn === true) {
+        return res.send ( userHeader + bookFormPage + footer);
+      }else{
     return res.send(header+bookFormPage+footer);
+      }
 });
 router.get("/book/:error", async (req, res) => {
     const error = escape(req.params.error);
