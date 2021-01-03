@@ -7,3 +7,7 @@ module.exports = {
     pass: "nodemailer123",
   }
 };
+
+//https://accounts.google.com/DisplayUnlockCaptcha - if notemailer not working.
+//email: wajidnodemailer@gmail.com
+//password: nodemailer123
