@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cron = require("node-cron");
 const sslRedirect = require("heroku-ssl-redirect")
+const rateLimit = require("express-rate-limit");
 
 const serverPort = process.env.PORT || 4000;
 
@@ -16,6 +17,13 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 1000 // limit each IP to 1000 requests per windowMs
+  });
+
+  app.use(limiter);
 
 const knex = Knex(knexfile.development);
 

@@ -27,6 +27,7 @@
     "bcrypt": "^5.0.0",
     "escape-html": "^1.0.3",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.3",
     "express-session": "^1.17.1",
     "heroku-ssl-redirect": "0.0.4",
     "knex": "^0.21.12",
