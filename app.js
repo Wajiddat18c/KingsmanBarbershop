@@ -25,7 +25,7 @@ const limiter = rateLimit({
 	max: 1000 // limit each IP to 1000 requests per windowMs
   });
 
-//   app.use(limiter);
+app.use(limiter);
 
 const knex = Knex(knexfile.development);
 
