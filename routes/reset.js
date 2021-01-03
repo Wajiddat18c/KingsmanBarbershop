@@ -113,10 +113,10 @@ router.post("/resetpassword", async (req, res) => {
 
             var mailOptions = {
                 from: '"Kingsman Barbershop" <wajidnodemailer@gmail.com>', // sender address (who sends)
-                to: `${name} <${email}>`, // list of receivers (who receives)
+                to: `<${email}>`, // list of receivers (who receives)
                 subject: `Gendan glemt kodeord`, // Subject line
-                text: `Hello ${name}, a password reset request was made, please visit https://kingsmanbarbershop.herokuapp.com//resetpassword/${token}`, // plaintext body
-                html: `Hello ${name}, a password reset request was made, please visit <a target="_blank" href="https://kingsmanbarbershop.herokuapp.com/resetpassword/${token}">https://kingsmanbarbershop.herokuapp.com/resetpassword/${token}</a>.`, // html body
+                text: `Hej din anmodning af gendannelse af password, besøg for at gendanne https://kingsmanbarbershop.herokuapp.com//resetpassword/${token}`, // plaintext body
+                html: `Hej din anmodning af gendannelse af password, besøg for at gendanne <a target="_blank" href="https://kingsmanbarbershop.herokuapp.com/resetpassword/${token}">https://kingsmanbarbershop.herokuapp.com/resetpassword/${token}</a>.`, // html body
             };
             
             // -----------
@@ -130,7 +130,7 @@ router.post("/resetpassword", async (req, res) => {
               
                 console.log("Message sent: " + info.response);
             });
-            return res.send(headerPage + "<h3>Please check your mail</h3><a href=\"\\\">Return to front page</a>" + footerPage);
+            return res.send(headerPage + "<h3>Vi har nu sendt en email til den angivne mail</h3><a href=\"\\\">Tilbage til forside</a>" + footerPage);
         }
     }
     catch (err) {

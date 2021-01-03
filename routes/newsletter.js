@@ -86,7 +86,7 @@ const footerPage = fs.readFileSync(
         var mailOptions = {
             from: '"Kingsman Barbershop" <wajidnodemailer@gmail.com>', // sender address (who sends)
             to: `<${email}>`, // list of receivers (who receives)
-            subject: `Bekræftelse på tidsbestilling`, // Subject line
+            subject: `Bekræftelse på tilmelding af nyhedsbrev`, // Subject line
             text: `Hej,
             
             Her er en bekræftelse på din tilmeling af nyhedsbrev hos Kingsman barbershop,
