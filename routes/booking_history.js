@@ -45,7 +45,8 @@ const footerPage = fs.readFileSync(
       .leftJoin("products", "products.id", "booking_products.product_id")
       .innerJoin("customer", "booking.customer_id", "customer.id")
       .groupBy("booking.id")
-      .where("customer.email", email));
+      .where("customer.email", email)
+      .orderBy("booking.start_time", "DESC"));
     }else{
       return res.redirect("/login");
     }
