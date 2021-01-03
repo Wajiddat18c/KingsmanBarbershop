@@ -40,6 +40,7 @@ const footerPage = fs.readFileSync(
       raw('group_concat(distinct(products.name), " , antal:", booking_products.amount)').as("products"),
       raw("SUM(products.price)").as('produktpris'),
       raw('SUM(services.price)').as("ydelsespris"),
+      raw('(SUM(services.price)+SUM(products.price))').as("samletpris"),
       "customer.name", "start_time", "customer.tlf")
       .leftJoin("booking_services", "booking.id", "booking_services.booking_id")
       .innerJoin("services", "booking_services.service_id","services.id")
