@@ -6,6 +6,7 @@ const Email = require("../models/Newsletter");
 const nodemailer = require('nodemailer');
 const mailCreds = require("../config/mailCreds");
 const fs = require("fs");
+const Newsletter = require("../models/Newsletter");
 
 
 const footerPage = fs.readFileSync(
@@ -124,4 +125,19 @@ const footerPage = fs.readFileSync(
   }
 
 });
+router.get("/admin/newsletter/all", async (req, res) => {
+  if (req.session.adminTrue !== true) {
+    return res.redirect("/login");
+  }
+  var all = await Newsletter.query().select("email");
+  str = "";
+  for (const i in all) {
+    
+      const newsletter = all[i];
+      str += newsletter.email+", ";
+    
+      
+  }
+  return res.send(str);
+})
 module.exports = router;
