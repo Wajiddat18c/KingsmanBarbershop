@@ -1,6 +1,6 @@
 //Author Ali
 
-const route = require("express").Router();
+const router = require("express").Router();
 
 const mailCreds = require("../config/mailCreds");
 const nodemailer = require('nodemailer');
@@ -25,7 +25,7 @@ const UserheaderPage = fs.readFileSync(
   __dirname + '/../public/userlogin/user_header.html', 
   "utf8"
 );
-route.get("/contact", (req, res) => {
+router.get("/contact", async(req, res) => {
   if (req.session.isOn === true) {
     return res.send ( UserheaderPage + contactForm + footerPage);
   }else{
@@ -33,7 +33,7 @@ route.get("/contact", (req, res) => {
   }
 });
 
-route.post("/contact", (req, res) => {
+router.post("/contact", async(req, res) => {
 
     const { name, email, question } = req.body;
 
@@ -50,6 +50,10 @@ route.post("/contact", (req, res) => {
         
         Her er en bekræftelse på at vi har modtaget din spørgsmål,
         Du kan forvente svar inden for 48 timer.
+
+
+        Spørgsmål
+        ${question}
         
         Hav en god dag.`, // plaintext body
         html:
@@ -77,7 +81,7 @@ route.post("/contact", (req, res) => {
         console.log("Message sent: " + info.response);
     });
 
-    res.send(headerPage + indexPage + footerPage)
+    return res.send(headerPage + indexPage + footerPage)
 });
 
-module.exports = route;
+module.exports = router;
