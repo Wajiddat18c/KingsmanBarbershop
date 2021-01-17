@@ -21,15 +21,10 @@ const BookingProducts = require('../models/BookingProducts');
 const header = fs.readFileSync(__dirname + '/../public/header.html', "utf8");
 const footer = fs.readFileSync(__dirname + '/../public/footer.html', "utf8");
 const bookFormPage = fs.readFileSync(__dirname + '/../public/bookform.html', "utf8");
-const booking_services = fs.readFileSync(__dirname+'/../public/book_services.html', 'utf-8');
-const booking_products = fs.readFileSync(__dirname+'/../public/book_products.html', 'utf-8');
-const booking_dates = fs.readFileSync(__dirname+'/../public/book_dates.html', 'utf-8');
 const mailCreds = require("../config/mailCreds");
 const Service = require('../models/Service');
 
 const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
-const adminBookPage = fs.readFileSync(__dirname + '/../public/adminlogin/admin_book.html', "utf8");
-const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 
 router.get("/bookings", async (req, res) => {
     if(req.session.adminTrue !== true)
