@@ -87,13 +87,14 @@ async function validate_user(req, res) {
           encodeURIComponent("Ugyldigt telefon nummer, format, 8x# : ########")
       );
     //Regex matches word(s) that's atleast 2 characters
-    if (!req.body.name.match(/^[a-zA-z ]{2,}$/))
+    if (!req.body.name.match(/^[ÆØÅæøåa-zA-z ]{2,}$/))
       return res.redirect(
         "/signup/Skriv venligst et navn på minimum 2 bogstaver."
       );
     //Checks if there's atleast 1 choosen service
     if (req.body.password.length < 8)
       return res.redirect("/signup/Kodeordet er for kort, brug mindst 8 tegn.");
+    return true;
   } catch (error) {
     console.log(error);
     return res.redirect(
@@ -107,7 +108,8 @@ router.post("/signup", async (req, res) => {
   // User.query().select().then(users => {
   //     return res.status(501).send({Response: users})
 
-  await validate_user(req, res);
+  if(!await validate_user(req, res))
+    return;
   const { name, password, email, tlf } = req.body;
   try {
     User.query()

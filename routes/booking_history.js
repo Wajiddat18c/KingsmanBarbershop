@@ -34,16 +34,16 @@ const footerPage = fs.readFileSync(
 
     if(req.session.isOn == true){
       let email = req.session.email
-      res.send(await Booking.query().select("booking.id",raw('group_concat(DISTINCT(services.name) separator " ")').as("services"),
+      res.send(await Booking.query().select("booking.id",raw('group_concat(DISTINCT(services.name) separator ", ")').as("services"),
       raw('group_concat(distinct(products.name), " , antal:", booking_products.amount)').as("products"),
-      raw("SUM(products.price)").as('produktpris'),
-      raw('SUM(services.price)').as("servicepris"),
-      raw('(IFNULL(SUM(services.price),0)+IFNULL(SUM(products.price),0))').as("samletpris"),
+      raw("SUM(DISTINCT (products.price * booking_products.amount))").as('produktpris'),
+      raw('SUM(DISTINCT services.price)').as("servicepris"),
+      raw('(IFNULL(SUM(DISTINCT services.price),0)+IFNULL(SUM(DISTINCT (products.price * booking_products.amount)),0))').as("samletpris"),
       "customer.name", "start_time", "customer.tlf")
-      .leftJoin("booking_services", "booking.id", "booking_services.booking_id")
+      .innerJoin("booking_services", "booking.id", "booking_services.booking_id")
       .innerJoin("services", "booking_services.service_id","services.id")
-      .leftJoin("booking_products", "booking.id", "booking_products.booking_id")
-      .leftJoin("products", "products.id", "booking_products.product_id")
+      .innerJoin("booking_products", "booking.id", "booking_products.booking_id")
+      .innerJoin("products", "products.id", "booking_products.product_id")
       .innerJoin("customer", "booking.customer_id", "customer.id")
       .groupBy("booking.id")
       .where("customer.email", email)
