@@ -119,7 +119,7 @@ router.post("/book", async (req, res) => {
                         var mailOptions = {
                           from: '"Kingsman Barbershop" <wajidnodemailer@gmail.com>', // sender address (who sends)
                           to: `${name} <${email}>`, // list of receivers (who receives)
-                          subject: `Bekræftelse på tidsbestilling`, // Subject line
+                          subject: `Oprettelse af brugerkonto`, // Subject line
                           text: `Hej ${name},
                           
                           Her er en bekræftelse på din registering hos Kingsman barbershop,
