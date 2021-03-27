@@ -1,50 +1,58 @@
 <h1>Admin products</h1>
-
-<div>
-    <h3>Rediger produkt</h3>
-    <form method="POST" action="/product/edit" id="edit_form">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Navn</th>
-                <th>Beskrivelse</th>
-                <th>Pris</th>
-                <th>Kategori</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="row">
+    <div class="col-md-6">
+    
+    
+     
+    <form action="/upload" method="post" id="upload_form" enctype="multipart/form-data">
+        <img id="img_view" class="img-thumbnail" >    
+        <h3>Upload Image</h3>
+        <input type="file" class="form-control" accept="image/*" name="photo" >
+            <input type="submit" class="btn btn-success" value="upload">
+            <button class="btn btn-danger" id="delete_image" type="button">Slet</button>
             
-                <tr>
-                    <td>
-                    <input class="form-control" placeholder="Navn" id="name" name="name" >
-                </td>
-                <td>
-                    <textarea class="form-control" placeholder="Beskrivelse" id="description" name="description"></textarea>
-                </td>
-                <td>
-                    <input class="form-control" placeholder="Pris" id="price" type="number" name="price">
-                </td>
-                <td>
-                    <select id="categorylist" name="category" class="form-control">
+    </form>
+    </div>
+    <div class="col-md-6">
+        <h3>Produkt oplysninger</h3>
+        <form method="POST" action="/product/edit" id="edit_form">
+            
+            <label for="name">Navn</label>
+            <input class="form-control" placeholder="Navn" id="name" name="name" >
 
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td colspan="2">
-                    <button class="btn btn-lg btn-success w-100 create-item">Gem ændringer</button>
-                </td>
-                <td></td>
-            </tr>
-        </tbody>
-</table>
-</form>
+            <label for="description">Beskrivelse</label>
+            <textarea class="form-control" placeholder="Beskrivelse" id="description" name="description"></textarea>
+            
+            <label for="price">Pris</label>
+            <input class="form-control" placeholder="Pris" id="price" type="number" name="price">
+            
+            <label for="category">Kategori</label>
+            <select id="categorylist" name="category" class="form-control">
+            </select>
+
+            <label for="img">Billede-sti</label>
+            <input class="form-control" placeholder="Billede" id="img" name="img">
+            <button class="btn btn-lg btn-success create-item">Gem ændringer</button>
+            
+            </form>
+    </div>
+</div>
+<div>
+    
+    
+
 <script>
     $(document).ready(() => {
         //Gets id added from url, appends it to the form.
-        let id = $("#id").val();
-        $("#edit_form").append($("#id"));
+        let id = $(".id").val();
+        $("#edit_form").append(`<input name="id" value=${id} type="hidden">`);
+        $("#upload_form").append(`<input name="id" value=${id} type="hidden">`);
+        
+        $("#delete_image").click((e) =>{
+            $("#img").val(" ");
+            $("#img_view").attr("src", " ");
+        })
+        
 
         let load_json = async(url) => {
         //Helper async function that loads the data of given URL & parses the JSON.
@@ -58,6 +66,13 @@
             $("#name").val(product.name);
             $("#description").val(product.description);
             $("#price").val(product.price);
+            if(product.img != " "){
+                $("#img").val(product.img);
+                $("#img_view").attr("src", "/"+product.img);
+            }
+            else{
+                $("#img").val("No img");
+            }
             
             load_json("/categories").then((values) => {
             //Loads categories into dropdown
@@ -79,6 +94,7 @@
             }, (reject) => console.log("Error: couldn't receive categories"));
 
         }, (reject) => console.log("Error: couldn't receive product info."));
+        
     })
 </script>
 </div>

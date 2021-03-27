@@ -56,6 +56,7 @@ exports.up = function(knex) {
      table.integer("price").notNullable();
      table.integer("cat_id").unsigned().notNullable();
      table.foreign("cat_id").references("categories.id");
+     table.string("img").notNullable().defaultTo(" ");
    })
    .createTable("product_img", (table) => {
      table.increments("id");

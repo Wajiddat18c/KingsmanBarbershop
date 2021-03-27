@@ -4,6 +4,8 @@ const router = require('express').Router();
 const fs = require('fs');
 const { raw } = require('objection');
 const BookingProducts = require('../models/BookingProducts');
+const multer = require('multer');
+const upload = multer({dest: __dirname + '/../public/uploads/images'});
 
 const adminHeader = fs.readFileSync(__dirname + '/../public/adminlogin/admin_header.html', "utf8");
 const footer = fs.readFileSync(__dirname + '/../public/footer.html', "utf8");
@@ -12,9 +14,10 @@ const header = fs.readFileSync(__dirname + '/../public/header.html', "utf8");
 const admin_products = fs.readFileSync(__dirname+ '/../public/adminlogin/admin_products.html', "utf8");
 const admin_edit_product = fs.readFileSync(__dirname+ '/../public/adminlogin/admin_edit_product.html', "utf8");
 const userHeader = fs.readFileSync(__dirname + '/../public/userlogin/user_header.html', "utf8");
+const admin_upload = fs.readFileSync(__dirname + '/../public/adminlogin/upload_img.html', "utf8");
 
 router.get("/products", async (req, res) => {
-    return res.send(await Product.query().select("products.id", "products.name", "products.description", "products.price", raw("categories.name as category"))
+    return res.send(await Product.query().select("products.id", "products.name", "products.img", "products.description", "products.price", raw("categories.name as category"))
     .innerJoin("categories", "products.cat_id", "categories.id"));
 });
 
@@ -66,25 +69,32 @@ router.get("/product/delete/:id", async (req, res) => {
 });
 
 router.get("/product/edit/:id", async (req, res) => {
+    
     if(req.session.adminTrue !== true)
         return res.redirect("/")
-    const extra_html = `<input type=hidden id="id" name="id" value=${req.params.id} />`;
+        
+    const extra_html = `<input type=hidden class="id" name="id" value=${req.params.id} />`;
     return res.send(adminHeader + extra_html + admin_edit_product + footer);
 });
 
 router.post("/product/edit", async (req, res) => {
+    
     if(req.session.adminTrue !== true)
         return res.redirect("/")
-    const { name, description, price, category, id } = req.body;
+        
+    const { name, description, price, category, id, img } = req.body;
     await Product.query().patch({
         name: name,
         description: description,
         price: price,
-        cat_id: category
+        cat_id: category,
+        img: img
     }).findById(id)
     return res.redirect("/admin_products"); 
 });
-
+router.get("/test", async (req, res) => {
+    return res.send(adminHeader + admin_upload + footer);
+});
 //Delete products from booking
 router.get("/booking_products/id/:booking_id/product/:id", async (req, res) => {
     if(req.session.adminTrue !== true)
@@ -96,5 +106,19 @@ router.get("/booking_products/id/:booking_id/product/:id", async (req, res) => {
     .where("booking_id", "=", booking_id);
    res.redirect("/admin_booking/"+booking_id);
 });
-
+router.post('/upload', upload.single('photo'), async (req, res) => {
+    if(req.session.adminTrue !== true)
+        return res.redirect("/")
+    const {id} = req.body;
+    if(req.file) {
+        const img = req.file.filename;
+        
+        await Product.query().patch({
+            img: img
+        }).findById(id);
+        return res.redirect(`/product/edit/${id}`);
+    }
+    else throw 'error';
+    
+});
 module.exports = router;

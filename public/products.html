@@ -18,10 +18,15 @@
   //Loads products & appends them to the table body
       for (let i in values) {
           let product = values[i];
+          let img = "";
+          if(product.img != " ")
+          {
+            img = `<img src="/${product.img}" >`;
+          }
           $("#productWrapper").append(`
           <div class="col-md-4">
             <div class="card p-0">
-              <img src="Sibel.jpg" alt="saks" style="width:100%">
+              ${img}
               <h3>${product.name}</h3>
               <div class="bg-dark text-light p-3">
                 <p>${product.description}</p>
